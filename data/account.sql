@@ -29,10 +29,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `account` (
-  `Id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `role` enum('admin','student') CHARACTER SET utf8 NOT NULL,
   `studentId` int(10) UNSIGNED NOT NULL,
-  `salt` varchar(100) CHARACTER SET utf8 NOT NULL,
   `hashValue` varchar(100) CHARACTER SET utf8 NOT NULL,
   `name` varchar(10) CHARACTER SET utf8 NOT NULL,
   `department` enum('資傳系','資工系','資訊英專') CHARACTER SET utf8 NOT NULL
@@ -46,7 +45,7 @@ CREATE TABLE `account` (
 -- 資料表索引 `account`
 --
 ALTER TABLE `account`
-  ADD PRIMARY KEY (`Id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
@@ -56,7 +55,7 @@ ALTER TABLE `account`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `account`
 --
 ALTER TABLE `account`
-  MODIFY `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -48,7 +48,9 @@ CREATE TABLE `comment` (
 -- 資料表索引 `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comment_ibfk_class` (`class`),
+  ADD KEY `comment_ibfk_student` (`student`);
 
 --
 -- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
@@ -59,6 +61,17 @@ ALTER TABLE `comment`
 --
 ALTER TABLE `comment`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- 已傾印資料表的限制式
+--
+
+--
+-- 資料表的限制式 `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_ibfk_class` FOREIGN KEY (`class`) REFERENCES `class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comment_ibfk_student` FOREIGN KEY (`student`) REFERENCES `account` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

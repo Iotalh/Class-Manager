@@ -1,18 +1,49 @@
 <?
+<<<<<<< Updated upstream
+=======
+function getSQLValue($value, $type)
+{
+	switch ($type) {
+		case "string":
+			$value = ($value != "") ? filter_var($value, FILTER_SANITIZE_MAGIC_QUOTES) : "";
+			break;
+		case "int":
+			$value = ($value != "") ? filter_var($value,FILTER_SANITIZE_NUMBER_INT) : "";
+			break;
+		case "email":
+			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_EMAIL) : "";
+			break;
+		case "url":
+			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_URL) : "";
+			break;
+	}
+	return $value;
+}
+
+>>>>>>> Stashed changes
 if(isset($_POST['submit_info'])){
 	
+	$post_role = $_POST['role'];
+	$post_studentId = $_POST['studentId'];
+	$post_name = $_POST['name'];
+	$post_department = $_POST['department'];
+
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         //$sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+=======
+        $sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+>>>>>>> Stashed changes
 		$stmt = $db_link->prepare($sql_insert);
 
-		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
+		$get_id_num_sql = "SELECT * FROM account ORDER BY id DESC LIMIT 0 , 1";
 		$all_id_num = $db_link->prepare($get_id_num_sql);
 		$id_num = $all_id_num -> num_rows;
 		$id_num = $id_num + 1;
-		echo "id_num= ". $id_num . "<br>";
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
+<<<<<<< Updated upstream
 		echo "cal_hashValue= ". $cal_hashValue . "<br>";
 
 		echo "data= ".$_POST["role"].$_POST["studentId"].$cal_hashValue. $_POST["name"].$_POST["department"];
@@ -24,14 +55,29 @@ if(isset($_POST['submit_info'])){
 		$_POST["department"]);
 
 		$result = mysql_query($sql_insert, $stmt) or die(mysql_error());
+=======
+		
+
+		echo "status: num= ".$id_num." role= ".$post_role." studentID= ".$post_studentId." hashValue= ".$cal_hashValue." name= ".
+		$post_name." department= ".$post_department."<br>";
+
+
+        $stmt->bind_param("iiissi",	$id_num,
+			getSQLValue($_POST["role"], "integer"),
+			getSQLValue($_POST["studentId"], "integer"),
+			$cal_hashValue, 
+			getSQLValue($_POST["name"], "string"),
+			getSQLValue($_POST["department"], "integer"));
+>>>>>>> Stashed changes
 
 		$stmt->execute();
 		$stmt->close();
-		$db_link->close();//重新導向回到主畫面
+		$db_link->close();
 
 
 		$message="註冊成功";
-		echo "<script>alert('$message'); location.href='login.php';</script>";
+		echo "<script>alert('$message'); 
+		//location.href='login.php';</script>";
 
 	}
 	else{
@@ -118,7 +164,7 @@ if(isset($_POST['submit_info'])){
 =======
 >>>>>>> master
 			</div>
-			<form method="POST" name="formPost" action="" onSubmit="return checkForm();">
+			<form method="POST" name="formPost">
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
 						<div class="input-group mb-3">
@@ -166,10 +212,15 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Role</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select name="role" class="custom-select" id="role" >
 								<option value="" selected disabled hidden></option>
+<<<<<<< Updated upstream
 								<option name="boardsex" id="admin" value="admin">Teacher</option>
 								<option name="boardsex" id="student" value="student">Student</option>
+=======
+								<option value="1" id="admin">Teacher</option>
+								<option value="2" id="student">Student</option>
+>>>>>>> Stashed changes
 							</select>
 						</div>
 >>>>>>> master
@@ -200,11 +251,17 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Department</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select name = "department" class="custom-select" id= "department">
 								<option value="" selected disabled hidden></option>
+<<<<<<< Updated upstream
 								<option value="資傳系">資傳系</option>
 								<option value="資工系">資工系</option>
 								<option value="資英系">資英系</option>
+=======
+								<option value="1">資傳系</option>
+								<option value="2">資工系</option>
+								<option value="3">資英系</option>
+>>>>>>> Stashed changes
 							</select>
 						</div>
 					</div>

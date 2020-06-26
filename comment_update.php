@@ -59,9 +59,11 @@ if (isset($_GET["id"])) {
 	$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
 	$stmt = $db_link->prepare($sql_select);
 	$stmt->bind_param("i", $_GET["id"]);
-	$stmt->execute();
-	$stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
-	$stmt->fetch();
+	if ($stmt->execute()) {
+		$stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
+		$stmt->fetch();
+		$stmt->close();
+	}
 }
 
 
@@ -125,9 +127,7 @@ if (isset($_GET["id"])) {
 							echo "<option value='' selected disabled hidden></option>";
 						}
 						for ($i = 0; $i <= 10; $i++) {
-							if ($sweetScore != $i) {
-								echo "<option value='$i'>$i</option>";
-							}
+							echo "<option value='$i'>$i</option>";
 						}
 						?>
 					</select>
@@ -144,9 +144,7 @@ if (isset($_GET["id"])) {
 							echo "<option value='' selected disabled hidden></option>";
 						}
 						for ($i = 0; $i <= 10; $i++) {
-							if ($hwScore != $i) {
-								echo "<option value='$i'>$i</option>";
-							}
+							echo "<option value='$i'>$i</option>";
 						}
 						?>
 					</select>
@@ -163,9 +161,7 @@ if (isset($_GET["id"])) {
 							echo "<option value='' selected disabled hidden></option>";
 						}
 						for ($i = 0; $i <= 10; $i++) {
-							if ($learnScore != $i) {
-								echo "<option value='$i'>$i</option>";
-							}
+							echo "<option value='$i'>$i</option>";
 						}
 						?>
 
@@ -174,7 +170,7 @@ if (isset($_GET["id"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" name="content" placeholder="輸入留言內容"></textarea>
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容"></textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -194,14 +190,41 @@ if (isset($_GET["id"])) {
 	var $sweet = $("#sweetScore");
 	var $hw = $("#hwScore");
 	var $learn = $("#learnScore");
-
+	var $content = $("#content");
 	$sweet.focusout(function() {
 		if ($(this).val() != null) {
 			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
 		} else {
 			$(this).addClass("is-invalid");
 			$(this).removeClass("is-valid");
-			console.log("null");
+		}
+	});
+	$hw.focusout(function() {
+		if ($(this).val() != null) {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
+		}
+	});
+	$learn.focusout(function() {
+		if ($(this).val() != null) {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
+		}
+	});
+	$content.focusout(function() {
+		if ($(this).val() != "") {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
 		}
 	});
 </script>

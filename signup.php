@@ -1,41 +1,34 @@
 <?
-function getSQLValue($value, $type)
-{
-switch ($type) {
-case "string":
-$value = ($value != "") ? filter_var(
-$value,
-FILTER_SANITIZE_MAGIC_QUOTES
-) : "";
-break;
-case "int":
-$value = ($value != "") ? filter_var(
-$value,
-FILTER_SANITIZE_NUMBER_INT
-) : "";
-break;
-case "email":
-$value = ($value != "") ? filter_var(
-$value,
-FILTER_VALIDATE_EMAIL
-) : "";
-break;
-case "url":
-$value = ($value != "") ? filter_var(
-$value,
-FILTER_VALIDATE_URL
-) : "";
-break;
-}
-return $value;
+function getSQLValue($value, $type){
+	switch ($type) {
+		case "string":
+			$value = ($value != "") ? filter_var($value,FILTER_SANITIZE_MAGIC_QUOTES) : "";
+			break;
+		case "int":
+			$value = ($value != "") ? filter_var($value, FILTER_SANITIZE_NUMBER_INT) : "";
+			break;
+		case "email":
+			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_EMAIL) : "";
+			break;
+		case "url":
+			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_URL) : "";
+			break;
+	}
+	return $value;
 }
 
 if(isset($_POST['submit_info'])){
 	
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
-        $sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($sql_insert);
+
+		$post_role = $_POST['role'];
+		$post_studentId = $_POST['studentId'];
+		$post_name = $_POST['name'];
+		$post_department = $_POST['department'];
+
 
 		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
 		$all_id_num = $db_link->prepare($get_id_num_sql);
@@ -45,20 +38,16 @@ if(isset($_POST['submit_info'])){
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
 		echo "cal_hashValue= ". $cal_hashValue . "<br>";
 		
-        $stmt->bind_param("iiissi",	$id_num,
-			getSQLValue($_POST["role"], "integer"),
-			getSQLValue($_POST["studentId"], "integer"),
-			$cal_hashValue, 
-			getSQLValue($_POST["name"], "string"),
-			getSQLValue($_POST["department"], "integer"));
+        $stmt->bind_param("iiissi",	$id_num, $post_role, $post_studentId, $cal_hashValue, $post_name, $post_department);
 
 		$stmt->execute();
 		$stmt->close();
-		$db_link->close();//重新導向回到主畫面
+		$db_link->close();
 
 
 		$message="註冊成功";
-		echo "<script>alert('$message'); location.href='login.php';</script>";
+		echo "<script>alert('$message');
+		//location.href='login.php';</script>";
 
 	}
 	else{

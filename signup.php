@@ -1,15 +1,40 @@
 <?
+function getSQLValue($value, $type)
+{
+switch ($type) {
+case "string":
+$value = ($value != "") ? filter_var(
+$value,
+FILTER_SANITIZE_MAGIC_QUOTES
+) : "";
+break;
+case "int":
+$value = ($value != "") ? filter_var(
+$value,
+FILTER_SANITIZE_NUMBER_INT
+) : "";
+break;
+case "email":
+$value = ($value != "") ? filter_var(
+$value,
+FILTER_VALIDATE_EMAIL
+) : "";
+break;
+case "url":
+$value = ($value != "") ? filter_var(
+$value,
+FILTER_VALIDATE_URL
+) : "";
+break;
+}
+return $value;
+}
+
 if(isset($_POST['submit_info'])){
 	
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
-<<<<<<< HEAD
-  // taskA_first_change
-        //$sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
-=======
-<<<<<<< HEAD
-        //$sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
->>>>>>> taskA_first_change
+        $sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($sql_insert);
 
 		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
@@ -19,16 +44,13 @@ if(isset($_POST['submit_info'])){
 		echo "id_num= ". $id_num . "<br>";
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
 		echo "cal_hashValue= ". $cal_hashValue . "<br>";
-
-		echo "data= ".$_POST["role"].$_POST["studentId"].$cal_hashValue. $_POST["name"].$_POST["department"];
-        $sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES ($id_num, 
-		$_POST["role"], 
-		$_POST["studentId"], 
-		$cal_hashValue, 
-		$_POST["name"], 
-		$_POST["department"]);
-
-		$result = mysql_query($sql_insert, $stmt) or die(mysql_error());
+		
+        $stmt->bind_param("iiissi",	$id_num,
+			getSQLValue($_POST["role"], "integer"),
+			getSQLValue($_POST["studentId"], "integer"),
+			$cal_hashValue, 
+			getSQLValue($_POST["name"], "string"),
+			getSQLValue($_POST["department"], "integer"));
 
 		$stmt->execute();
 		$stmt->close();
@@ -42,56 +64,6 @@ if(isset($_POST['submit_info'])){
 	else{
 		$message="輸入的兩次密碼不符，請重新輸入";
 		echo "<script>alert('$message'); </script>";
-<<<<<<< HEAD
-// master
-// 		$sql_query = "SELECT * FROM account";
-// 		$result = $db_link->query($sql_query);
-// 		$row_result=$result->fetch_assoc();
-// 		$username = $row_result["Id"];
-// 		$hashValue = $row_result["hashValue"];
-//         $db_link->close();
-//         $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
-// 		if(($username==$_POST["username"]) && ($password_check == 'true')){
-// 			$_SESSION["loginMember"]=$username;
-// 			$message="登入成功";
-// 			echo "<script>alert('$message'); location.href = 'board.php';</script>";
-// 		}else if($username!=$_POST["username"]){
-// 			$message="username error, please relogin";
-// 			echo "<script>alert('$message'); location.href = 'login.php';</script>";
-// 		}else if($passwd!=$_POST["passwd"]){
-// 			$message="password error, please relogin";
-// 			echo "<script>alert('$message'); location.href = 'login.php';</script>";
-// 		}
-// 	}
-// 	else{
-// 		$message="輸入的兩次密碼不符，請重新輸入";
-// 		echo "<script>alert('$message'); location.href = 'login.php';</script>";
-=======
-=======
-		$sql_query = "SELECT * FROM account";
-		$result = $db_link->query($sql_query);
-		$row_result=$result->fetch_assoc();
-		$username = $row_result["Id"];
-		$hashValue = $row_result["hashValue"];
-        $db_link->close();
-        $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
-		if(($username==$_POST["username"]) && ($password_check == 'true')){
-			$_SESSION["loginMember"]=$username;
-			$message="登入成功";
-			echo "<script>alert('$message'); location.href = 'board.php';</script>";
-		}else if($username!=$_POST["username"]){
-			$message="username error, please relogin";
-			echo "<script>alert('$message'); location.href = 'login.php';</script>";
-		}else if($passwd!=$_POST["passwd"]){
-			$message="password error, please relogin";
-			echo "<script>alert('$message'); location.href = 'login.php';</script>";
-		}
-	}
-	else{
-		$message="輸入的兩次密碼不符，請重新輸入";
-		echo "<script>alert('$message'); location.href = 'login.php';</script>";
->>>>>>> master
->>>>>>> taskA_first_change
 	}
 }
 ?>
@@ -125,20 +97,10 @@ if(isset($_POST['submit_info'])){
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
-<<<<<<< HEAD
-				</ul>
-=======
 
-<<<<<<< HEAD
-			<div class="input-group mb-3">
-  				<div class="input-group-prepend">
-			    	<span class="input-group-text" id="basic-addon1">姓名</span>
-				</div>
- 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="name" id="name" required>
-=======
 				</ul>
->>>>>>> master
->>>>>>> taskA_first_change
+
+				</ul>
 			</div>
 		</nav>
 	</header>
@@ -148,13 +110,6 @@ if(isset($_POST['submit_info'])){
 				<div class="col-sm">
 					<h1 class="font-weight-bolder text-center">註冊</h1>
 				</div>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
- 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="studentId" id="studentId" required>
-=======
->>>>>>> master
->>>>>>> taskA_first_change
 			</div>
 			<form method="POST" name="formPost" action="" onSubmit="return checkForm();">
 				<div class="form-group row justify-content-md-center">
@@ -169,27 +124,7 @@ if(isset($_POST['submit_info'])){
 					</div>
 				</div>
 
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
-
-			<div class="row">
-				<legend class="col-form-label col-sm-2 pt-e">role</legend>
-				<div class="col-auto">
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="boardsex" id="0" value="admin" checked>
-						<label class="form-check-label" for="boardsex1">
-							Teacher
-						</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="boardsex" id="1" value="student">
-						<label class="form-check-label" for="boardsex2">
-							Student
-						</label>
-=======
->>>>>>> taskA_first_change
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
 						<div class="input-group mb-3">
@@ -213,33 +148,9 @@ if(isset($_POST['submit_info'])){
 								<option name="boardsex" id="student" value="1">Student</option>
 							</select>
 						</div>
-<<<<<<< HEAD
-					</div>
-				</div>
-=======
->>>>>>> master
 					</div>
 				</div>
 
-<<<<<<< HEAD
-
-			<div class="input-group mb-3">
-  				<div class="input-group-prepend">
-   					<label class="input-group-text" for="inputGroupSelect01">Department</label>
-  				</div>
-  				<select class="custom-select" id="department" required>
-				  	<option value="" selected disabled hidden>Department</option>
-    				<option value="0">資傳系</option>
-    				<option value="1">資工系</option>
-    				<option value="2">資訊英專</option>
-  				</select>
-			</div>
-
-			<div class="input-group mb-3">
-  				<div class="input-group-prepend">
-			    	<span class="input-group-text" id="basic-addon1">Password</span>
-=======
->>>>>>> taskA_first_change
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
 						<div class="input-group mb-3">
@@ -254,10 +165,7 @@ if(isset($_POST['submit_info'])){
 							</select>
 						</div>
 					</div>
-<<<<<<< HEAD
-=======
->>>>>>> master
->>>>>>> taskA_first_change
+					
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">

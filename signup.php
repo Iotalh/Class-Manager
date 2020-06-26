@@ -3,28 +3,39 @@ if(isset($_POST['submit_info'])){
 	
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
-		$sql_query = "SELECT * FROM account";
-		$result = $db_link->query($sql_query);
-		$row_result=$result->fetch_assoc();
-		$username = $row_result["Id"];
-		$hashValue = $row_result["hashValue"];
-        $db_link->close();
-        $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
-		if(($username==$_POST["username"]) && ($password_check == 'true')){
-			$_SESSION["loginMember"]=$username;
-			$message="登入成功";
-			echo "<script>alert('$message'); location.href='board.php';</script>";
-		}else if($username!=$_POST["username"]){
-			$message="username error, please relogin";
-			echo "<script>alert('$message'); location.href='login.php';</script>";
-		}else if($passwd!=$_POST["passwd"]){
-			$message="password error, please relogin";
-			echo "<script>alert('$message'); location.href='login.php';</script>";
-		}
+        //$sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+		$stmt = $db_link->prepare($sql_insert);
+
+		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
+		$all_id_num = $db_link->prepare($get_id_num_sql);
+		$id_num = $all_id_num -> num_rows;
+		$id_num = $id_num + 1;
+		echo "id_num= ". $id_num . "<br>";
+		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
+		echo "cal_hashValue= ". $cal_hashValue . "<br>";
+
+		echo "data= ".$_POST["role"].$_POST["studentId"].$cal_hashValue. $_POST["name"].$_POST["department"];
+        $sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES ($id_num, 
+		$_POST["role"], 
+		$_POST["studentId"], 
+		$cal_hashValue, 
+		$_POST["name"], 
+		$_POST["department"]);
+
+		$result = mysql_query($sql_insert, $stmt) or die(mysql_error());
+
+		$stmt->execute();
+		$stmt->close();
+		$db_link->close();//重新導向回到主畫面
+
+
+		$message="註冊成功";
+		echo "<script>alert('$message'); location.href='login.php';</script>";
+
 	}
 	else{
 		$message="輸入的兩次密碼不符，請重新輸入";
-		echo "<script>alert('$message'); location.href='login.php';</script>";
+		echo "<script>alert('$message'); </script>";
 	}
 }
 ?>
@@ -89,7 +100,7 @@ if(isset($_POST['submit_info'])){
   				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="basic-addon1">姓名</span>
 				</div>
- 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="name" id="name">
+ 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="name" id="name" required>
 			</div>
 
 
@@ -97,7 +108,7 @@ if(isset($_POST['submit_info'])){
   				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="basic-addon1">學號</span>
 				</div>
- 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="Id" id="Id">
+ 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="studentId" id="studentId" required>
 			</div>
 
 
@@ -106,13 +117,13 @@ if(isset($_POST['submit_info'])){
 				<legend class="col-form-label col-sm-2 pt-e">role</legend>
 				<div class="col-auto">
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="boardsex" id="admin" value="admin" checked>
+						<input class="form-check-input" type="radio" name="boardsex" id="0" value="admin" checked>
 						<label class="form-check-label" for="boardsex1">
 							Teacher
 						</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="boardsex" id="student" value="student">
+						<input class="form-check-input" type="radio" name="boardsex" id="1" value="student">
 						<label class="form-check-label" for="boardsex2">
 							Student
 						</label>
@@ -125,11 +136,11 @@ if(isset($_POST['submit_info'])){
   				<div class="input-group-prepend">
    					<label class="input-group-text" for="inputGroupSelect01">Department</label>
   				</div>
-  				<select class="custom-select" id="department">
+  				<select class="custom-select" id="department" required>
 				  	<option value="" selected disabled hidden>Department</option>
-    				<option value="資傳系">資傳系</option>
-    				<option value="資工系">資工系</option>
-    				<option value="資英系">資英系</option>
+    				<option value="0">資傳系</option>
+    				<option value="1">資工系</option>
+    				<option value="2">資訊英專</option>
   				</select>
 			</div>
 

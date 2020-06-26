@@ -1,7 +1,38 @@
 <?
-if(isset($_POST['submit_info'])){
-	
-	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
+function getSQLValue($value, $type)
+{
+	switch ($type) {
+		case "string":
+			$value = ($value != "") ? filter_var(
+				$value,
+				FILTER_SANITIZE_MAGIC_QUOTES
+			) : "";
+			break;
+		case "int":
+			$value = ($value != "") ? filter_var(
+				$value,
+				FILTER_SANITIZE_NUMBER_INT
+			) : "";
+			break;
+		case "email":
+			$value = ($value != "") ? filter_var(
+				$value,
+				FILTER_VALIDATE_EMAIL
+			) : "";
+			break;
+		case "url":
+			$value = ($value != "") ? filter_var(
+				$value,
+				FILTER_VALIDATE_URL
+			) : "";
+			break;
+	}
+	return $value;
+}
+
+if (isset($_POST['submit_info'])) {
+
+	if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
 		require_once("connectMysql.php");
         $sql_insert = "INSERT INTO account (id ,userRole, studentId ,hashValue ,userName ,department) VALUES (?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($sql_insert);
@@ -14,7 +45,7 @@ if(isset($_POST['submit_info'])){
 
 		$get_id_num_sql = "SELECT * FROM account ORDER BY id DESC LIMIT 0 , 1";
 		$all_id_num = $db_link->prepare($get_id_num_sql);
-		$id_num = $all_id_num -> num_rows;
+		$id_num = $all_id_num->num_rows;
 		$id_num = $id_num + 1;
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
 
@@ -60,8 +91,7 @@ if(isset($_POST['submit_info'])){
 	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<a class="navbar-brand" href="index.php">課程評論管理系統</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -91,8 +121,7 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">姓名</span>
 							</div>
-							<input type="text" class="form-control" aria-label="Username"
-								aria-describedby="basic-addon1" name="name" id="name">
+							<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="name" id="name">
 						</div>
 					</div>
 				</div>
@@ -104,8 +133,7 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">學號</span>
 							</div>
-							<input type="text" class="form-control" aria-label="studentId"
-								aria-describedby="basic-addon1" name="studentId" id="studentId">
+							<input type="text" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" name="studentId" id="studentId">
 						</div>
 					</div>
 				</div>
@@ -138,7 +166,6 @@ if(isset($_POST['submit_info'])){
 							</select>
 						</div>
 					</div>
-					
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
@@ -146,8 +173,7 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">Password</span>
 							</div>
-							<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd"
-								required>
+							<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd" required>
 						</div>
 					</div>
 				</div>
@@ -167,11 +193,9 @@ if(isset($_POST['submit_info'])){
 						<div class="form-group row">
 							<div class="col-sm text-center">
 								<input name="action" type="hidden" id="action" value="add">
-								<input class="btn btn-dark" type="submit" name="submit_info" id="submit_info"
-									value="送出註冊">
+								<input class="btn btn-dark" type="submit" name="submit_info" id="submit_info" value="送出註冊">
 								<input class="btn btn-dark" type="reset" name="button2" id="button2" value="重設資料">
-								<input class="btn btn-dark" type="button" name="button3" id="button3" value="回上一頁"
-									onClick="window.history.back();">
+								<input class="btn btn-dark" type="button" name="button3" id="button3" value="回上一頁" onClick="window.history.back();">
 							</div>
 						</div>
 					</div>

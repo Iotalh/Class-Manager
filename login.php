@@ -4,22 +4,27 @@ if (isset($_POST['login_info'])) {
 	if (isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
 		if (isset($_POST["username"]) && isset($_POST["passwd"])) {
 			require_once("connectMysql.php");
-			$sql_query = "SELECT * FROM admin";
+			$sql_query = "SELECT * FROM account";
 			$result = $db_link->query($sql_query);
 			$row_result = $result->fetch_assoc();
-			$username = $row_result["Id"];
+			$username = $row_result['studentId'];
 			$hashValue = $row_result["hashValue"];
 			$db_link->close();
 			$password_check = password_verify($_POST["passwd"],  $hashValue);
 			if (($username == $_POST["username"]) && ($password_check == 'true')) {
 				$_SESSION["loginMember"] = $username;
 				$message = "登入成功";
-				echo "<script>alert('$message'); location.href = 'board.php';</script>";
-			} else if ($username != $_POST["username"]) {
-				$message = "username error, please relogin";
-				echo "<script>alert('$message'); location.href = 'login.php';</script>";
-			} else if ($passwd != $_POST["passwd"]) {
-				$message = "password error, please relogin";
+				
+
+
+				echo "<script>alert('$message'); location.href = 'index.php';</script>";
+
+
+
+
+
+			} else {
+				$message = "StudentId or password error, please try again.";
 				echo "<script>alert('$message'); location.href = 'login.php';</script>";
 			}
 		}
@@ -68,14 +73,14 @@ if (isset($_POST['login_info'])) {
 			<form method="POST" name="loginMember" action="">
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
-						<label for="uname"><b>Username</b></label>
-						<input class="form-control content" type="text" placeholder="Enter ID" name="username" required>
+						<label for="uname"><b>學號</b></label>
+						<input name="studentID" class="form-control content" type="text" placeholder="Enter studentID"  required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<label for="psw"><b>Password</b></label>
-						<input class="form-control content" type="password" placeholder="Enter Password" name="passwd" required>
+						<input name="passwd" class="form-control content" type="password" placeholder="Enter Password" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">

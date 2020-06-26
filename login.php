@@ -1,32 +1,33 @@
 <?
 if (isset($_POST['login_info'])) {
 	session_start();
-	if (isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
-		if (isset($_POST["username"]) && isset($_POST["passwd"])) {
-			require_once("connectMysql.php");
-			$sql_query = "SELECT * FROM account";
-			$result = $db_link->query($sql_query);
-			$row_result = $result->fetch_assoc();
-			$username = $row_result['studentId'];
-			$hashValue = $row_result["hashValue"];
-			$db_link->close();
-			$password_check = password_verify($_POST["passwd"],  $hashValue);
-			if (($username == $_POST["username"]) && ($password_check == 'true')) {
-				$_SESSION["loginMember"] = $username;
-				$message = "登入成功";
-				
+	if (isset($_POST["studentID"]) && isset($_POST["passwd"])) {
+		require_once("connectMysql.php");
 
+		$post_studentID = $_POST["studentID"];
+		$post_passwd = $_POST["passwd"];
 
-				echo "<script>alert('$message'); location.href = 'index.php';</script>";
+		$sql_query = "SELECT * FROM account where studentID = '$post_studentID' ";
+		$result = $db_link->query($sql_query);
+		$row_result = $result->fetch_assoc();
 
+		$studentID = $row_result['studentId'];
+		$hashValue = $row_result["hashValue"];
 
-
-
-
-			} else {
-				$message = "StudentId or password error, please try again.";
-				echo "<script>alert('$message'); location.href = 'login.php';</script>";
-			}
+		$db_link->close();
+		$password_check = password_verify($post_passwd,  $hashValue);
+		if (($studentID == $post_studentID) && ($password_check == 'true')) {
+			$_SESSION["userName"] = $row_result['userName'];
+			$_SESSION["userRole"] = $row_result['userRole'];
+			$_SESSION["studentId"] = $row_result['studentId'];
+			$_SESSION["department"] = $row_result['department'];
+			$message = "登入成功";
+				echo "<script>alert('$message'); 
+				location.href = 'index.php';</script>";
+		} else {
+			$message = "StudentId or password error, please try again.";
+			echo "<script>alert('$message'); 
+			location.href = 'login.php';</script>";
 		}
 	}
 }
@@ -86,6 +87,7 @@ if (isset($_POST['login_info'])) {
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<button style="width: 100%;" class="btn btn-dark" type="submit" name="login_info">Login</button>
+						<input style="width: 100%;" type="button" class= "btn btn-dark" value="SignUp" onclick="location.href='signup.php'"></input>
 					</div>
 				</div>
 			</form>

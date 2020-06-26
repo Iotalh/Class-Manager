@@ -30,12 +30,17 @@ if(isset($_POST['submit_info'])){
 
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< HEAD
         //$sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
 =======
         $sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
 >>>>>>> Stashed changes
+=======
+  // taskA_first_change
+        //$sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 		$stmt = $db_link->prepare($sql_insert);
 
 		$get_id_num_sql = "SELECT * FROM account ORDER BY id DESC LIMIT 0 , 1";
@@ -83,6 +88,7 @@ if(isset($_POST['submit_info'])){
 	else{
 		$message="輸入的兩次密碼不符，請重新輸入";
 		echo "<script>alert('$message'); </script>";
+<<<<<<< HEAD
 =======
 		$sql_query = "SELECT * FROM account";
 		$result = $db_link->query($sql_query);
@@ -107,6 +113,31 @@ if(isset($_POST['submit_info'])){
 		$message="輸入的兩次密碼不符，請重新輸入";
 		echo "<script>alert('$message'); location.href = 'login.php';</script>";
 >>>>>>> master
+=======
+// master
+// 		$sql_query = "SELECT * FROM account";
+// 		$result = $db_link->query($sql_query);
+// 		$row_result=$result->fetch_assoc();
+// 		$username = $row_result["Id"];
+// 		$hashValue = $row_result["hashValue"];
+//         $db_link->close();
+//         $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
+// 		if(($username==$_POST["username"]) && ($password_check == 'true')){
+// 			$_SESSION["loginMember"]=$username;
+// 			$message="登入成功";
+// 			echo "<script>alert('$message'); location.href = 'board.php';</script>";
+// 		}else if($username!=$_POST["username"]){
+// 			$message="username error, please relogin";
+// 			echo "<script>alert('$message'); location.href = 'login.php';</script>";
+// 		}else if($passwd!=$_POST["passwd"]){
+// 			$message="password error, please relogin";
+// 			echo "<script>alert('$message'); location.href = 'login.php';</script>";
+// 		}
+// 	}
+// 	else{
+// 		$message="輸入的兩次密碼不符，請重新輸入";
+// 		echo "<script>alert('$message'); location.href = 'login.php';</script>";
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 	}
 }
 ?>
@@ -140,6 +171,7 @@ if(isset($_POST['submit_info'])){
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 			<div class="input-group mb-3">
@@ -150,6 +182,9 @@ if(isset($_POST['submit_info'])){
 =======
 				</ul>
 >>>>>>> master
+=======
+				</ul>
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 			</div>
 		</nav>
 	</header>
@@ -160,9 +195,12 @@ if(isset($_POST['submit_info'])){
 					<h1 class="font-weight-bolder text-center">註冊</h1>
 				</div>
 <<<<<<< HEAD
+<<<<<<< HEAD
  				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="studentId" id="studentId" required>
 =======
 >>>>>>> master
+=======
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 			</div>
 			<form method="POST" name="formPost">
 				<div class="form-group row justify-content-md-center">
@@ -177,6 +215,7 @@ if(isset($_POST['submit_info'])){
 					</div>
 				</div>
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 
@@ -195,14 +234,16 @@ if(isset($_POST['submit_info'])){
 							Student
 						</label>
 =======
+=======
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">學號</span>
 							</div>
-							<input type="text" class="form-control" aria-label="Username"
-								aria-describedby="basic-addon1" name="Id" id="Id">
+							<input type="text" class="form-control" aria-label="studentId"
+								aria-describedby="basic-addon1" name="studentId" id="studentId">
 						</div>
 					</div>
 				</div>
@@ -214,6 +255,7 @@ if(isset($_POST['submit_info'])){
 							</div>
 							<select name="role" class="custom-select" id="role" >
 								<option value="" selected disabled hidden></option>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 								<option name="boardsex" id="admin" value="admin">Teacher</option>
 								<option name="boardsex" id="student" value="student">Student</option>
@@ -245,6 +287,14 @@ if(isset($_POST['submit_info'])){
   				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="basic-addon1">Password</span>
 =======
+=======
+								<option name="boardsex" id="admin" value="0">Teacher</option>
+								<option name="boardsex" id="student" value="1">Student</option>
+							</select>
+						</div>
+					</div>
+				</div>
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
 						<div class="input-group mb-3">
@@ -253,6 +303,7 @@ if(isset($_POST['submit_info'])){
 							</div>
 							<select name = "department" class="custom-select" id= "department">
 								<option value="" selected disabled hidden></option>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 								<option value="資傳系">資傳系</option>
 								<option value="資工系">資工系</option>
@@ -266,6 +317,14 @@ if(isset($_POST['submit_info'])){
 						</div>
 					</div>
 >>>>>>> master
+=======
+								<option value="0">資傳系</option>
+								<option value="1">資工系</option>
+								<option value="2">資英系</option>
+							</select>
+						</div>
+					</div>
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">

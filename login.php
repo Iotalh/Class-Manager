@@ -40,7 +40,10 @@ if(isset($_POST['login_info'])){
 	<link rel="stylesheet" href="css/nav.css">
 	<title>登入</title>
 </head>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f216190c8ec21fa84eabf87ae09552fe307a5e46
 <body>
 	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">

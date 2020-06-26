@@ -1,36 +1,18 @@
 <?
-function getSQLValue($value, $type){
-	switch ($type) {
-		case "string":
-			$value = ($value != "") ? filter_var($value,FILTER_SANITIZE_MAGIC_QUOTES) : "";
-			break;
-		case "int":
-			$value = ($value != "") ? filter_var($value, FILTER_SANITIZE_NUMBER_INT) : "";
-			break;
-		case "email":
-			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_EMAIL) : "";
-			break;
-		case "url":
-			$value = ($value != "") ? filter_var($value, FILTER_VALIDATE_URL) : "";
-			break;
-	}
-	return $value;
-}
-
 if(isset($_POST['submit_info'])){
 	
 	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
-        $sql_insert = "INSERT INTO account (id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO account (id ,userRole, studentId ,hashValue ,userName ,department) VALUES (?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($sql_insert);
+		echo "cccccccccccccccc".$stmt -> error."  c  ";
 
-		$post_role = $_POST['role'];
-		$post_studentId = $_POST['studentId'];
-		$post_name = $_POST['name'];
-		$post_department = $_POST['department'];
+		$post_role = (int)$_POST['role'];
+		$post_studentId = (int)$_POST['studentId'];
+		$post_name = (string)$_POST['name'];
+		$post_department = (int)$_POST['department'];
 
-
-		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
+		$get_id_num_sql = "SELECT * FROM account ORDER BY id DESC LIMIT 0 , 1";
 		$all_id_num = $db_link->prepare($get_id_num_sql);
 		$id_num = $all_id_num -> num_rows;
 		$id_num = $id_num + 1;
@@ -150,9 +132,9 @@ if(isset($_POST['submit_info'])){
 							</div>
 							<select name ="department" class="custom-select" >
 								<option value="" selected disabled hidden></option>
-								<option value="資傳系">資傳系</option>
-								<option value="資工系">資工系</option>
-								<option value="資訊英專">資訊英專</option>
+								<option value="0">資傳系</option>
+								<option value="1">資工系</option>
+								<option value="2">資訊英專</option>
 							</select>
 						</div>
 					</div>

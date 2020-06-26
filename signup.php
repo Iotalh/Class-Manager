@@ -34,9 +34,11 @@ if(isset($_POST['submit_info'])){
 		$all_id_num = $db_link->prepare($get_id_num_sql);
 		$id_num = $all_id_num -> num_rows;
 		$id_num = $id_num + 1;
-		echo "id_num= ". $id_num . "<br>";
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
-		echo "cal_hashValue= ". $cal_hashValue . "<br>";
+
+		
+		echo "status: id= ".$id_num." role= ".$post_role." studentID= ". $post_studentId." hash= ".$cal_hashValue." name= ".$post_name.
+		" department= ".$post_department."<br>";
 		
         $stmt->bind_param("iiissi",	$id_num, $post_role, $post_studentId, $cal_hashValue, $post_name, $post_department);
 
@@ -131,10 +133,10 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Role</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select  name ="role" class="custom-select" >
 								<option value="" selected disabled hidden></option>
-								<option name="boardsex" id="admin" value="0">Teacher</option>
-								<option name="boardsex" id="student" value="1">Student</option>
+								<option value="0">Teacher</option>
+								<option value="1">Student</option>
 							</select>
 						</div>
 					</div>
@@ -146,11 +148,11 @@ if(isset($_POST['submit_info'])){
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Department</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select name ="department" class="custom-select" >
 								<option value="" selected disabled hidden></option>
-								<option value="0">資傳系</option>
-								<option value="1">資工系</option>
-								<option value="2">資英系</option>
+								<option value="資傳系">資傳系</option>
+								<option value="資工系">資工系</option>
+								<option value="資訊英專">資訊英專</option>
 							</select>
 						</div>
 					</div>

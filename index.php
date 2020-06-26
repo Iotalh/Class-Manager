@@ -34,6 +34,7 @@
 					</li>
 				</ul>
 				<div class="row nav-item justify-content-end">
+					<a class="col nav-link nav-btn" href="#"><?echo $_SESSION["userName"]?></a>
 					<a class="col nav-link nav-btn" href="login.php">登入</a>
 					<a class="col nav-link nav-btn" href="signup.php">註冊</a>
 					<a class="col nav-link nav-btn" href="logout.php">登出</a>
@@ -46,7 +47,7 @@
 
 
 
-		
+
 	</header>
 </body>
 

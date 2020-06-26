@@ -21,8 +21,7 @@
 	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<a class="navbar-brand" href="index.php">課程評論管理系統</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -45,8 +44,7 @@
 			<form action="" method="post" name="formPost" onsubmit="return checkForm();">
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">
-						<input type="text" name="boardsubject" id="boardsubject" class="form-control"
-							placeholder="輸入留言標題">
+						<input type="text" name="boardsubject" id="boardsubject" class="form-control" placeholder="輸入留言標題">
 					</div>
 				</div>
 
@@ -58,8 +56,7 @@
 				<div class="form-group row justify-content-md-center">
 					<input type="hidden" name="action" id="action" value="add">
 					<input type="submit" value="刪除留言" class="btn btn-dark post-btns" name="button" id="button">
-					<input type="button" value="回上一頁" class="btn btn-dark post-btns" name="button3" id="button3"
-						onclick="window.history.back();">
+					<input type="button" value="回上一頁" class="btn btn-dark post-btns" name="button3" id="button3" onclick="window.history.back();">
 				</div>
 			</form>
 		</div>

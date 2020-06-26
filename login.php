@@ -15,13 +15,13 @@ if(isset($_POST['login_info'])){
 			if(($username==$_POST["username"]) && ($password_check == 'true')){
 				$_SESSION["loginMember"]=$username;
 				$message="登入成功";
-				echo "<script>alert('$message'); location.href='board.php';</script>";
+				echo "<script>alert('$message'); location.href = 'board.php';</script>";
 			}else if($username!=$_POST["username"]){
 				$message="username error, please relogin";
-				echo "<script>alert('$message'); location.href='login.php';</script>";
+				echo "<script>alert('$message'); location.href = 'login.php';</script>";
 			}else if($passwd!=$_POST["passwd"]){
 				$message="password error, please relogin";
-				echo "<script>alert('$message'); location.href='login.php';</script>";
+				echo "<script>alert('$message'); location.href = 'login.php';</script>";
 			}
 		}
 	}
@@ -31,54 +31,65 @@ if(isset($_POST['login_info'])){
 <!DOCTYPE html>
 <html lang="en">
 <title>登入</title>
+
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-	<style>
-		body {
-			background: skyblue;
-		}
-		* {
-			font-family:"微軟正黑體";
-		}
-		.container {
-			background: white;
-		}
-		img.sex {
-			width:25px;
-		}
-		span {
-			font-size: 10px;
-		}
-		img.smIcon {
-			border: 0;
-			width: 16px;
-		}
-	</style>
+	<link rel="stylesheet" href="css/nav.css">
+	<title>登入</title>
 </head>
+
 <body>
-	<div class="container border border-secondary rounded">
-		<div class="row">
-			<div class="col-sm">
-				<h1 class="font-weight-bolder text-center">課程評論管理系統</h1>
+	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<a class="navbar-brand" href="index.php">課程評論管理系統</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+					</li>
+
+				</ul>
 			</div>
+		</nav>
+	</header>
+	<div class="container-fluid post text-white bg-dark">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm">
+					<h1 class="font-weight-bolder text-center">登入</h1>
+				</div>
+			</div>
+			<form method="POST" name="loginMember" action="">
+				<div class="form-group row justify-content-md-center">
+					<div class="col-4">
+						<label for="uname"><b>Username</b></label>
+						<input class="form-control content" type="text" placeholder="Enter ID" name="username" required>
+					</div>
+				</div>
+				<div class="form-group row justify-content-md-center">
+					<div class="col-4">
+						<label for="psw"><b>Password</b></label>
+						<input class="form-control content" type="password" placeholder="Enter Password" name="passwd"
+							required>
+					</div>
+				</div>
+				<div class="form-group row justify-content-md-center">
+					<div class="col-4">
+						<button style="width: 100%;" class="btn btn-dark" type="submit" name="login_info">Login</button>
+					</div>
+				</div>
+			</form>
 		</div>
-		<form method="POST" name = "loginMember" action = "">
-
-      		<label for="uname"><b>Username</b></label>
-     		<input type="text" placeholder="Enter ID" name="username" required>
-
-      		<label for="psw"><b>Password</b></label>
-      		<input type="password" placeholder="Enter Password" name="passwd" required>
-        
-   			<button type="submit" name = "login_info">Login</button>
-   		</div>
-
-		</form>
 	</div>
 </body>
+
 </html>

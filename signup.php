@@ -1,69 +1,31 @@
 <?
-function getSQLValue($value, $type)
-{
-	switch ($type) {
-		case "string":
-			$value = ($value != "") ? filter_var(
-				$value,
-				FILTER_SANITIZE_MAGIC_QUOTES
-			) : "";
-			break;
-		case "int":
-			$value = ($value != "") ? filter_var(
-				$value,
-				FILTER_SANITIZE_NUMBER_INT
-			) : "";
-			break;
-		case "email":
-			$value = ($value != "") ? filter_var(
-				$value,
-				FILTER_VALIDATE_EMAIL
-			) : "";
-			break;
-		case "url":
-			$value = ($value != "") ? filter_var(
-				$value,
-				FILTER_VALIDATE_URL
-			) : "";
-			break;
-	}
-	return $value;
-}
-
 if (isset($_POST['submit_info'])) {
 
 	if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
 		require_once("connectMysql.php");
-		$sql_insert = "INSERT INTO account (Id ,role, studentId ,hashValue ,name ,department) VALUES (?, ?, ?, ?, ?, ?)";
-		$stmt = $db_link->prepare($sql_insert);
 
-		$get_id_num_sql = "SELECT * FROM account ORDER BY Id DESC LIMIT 0 , 1";
-		$all_id_num = $db_link->prepare($get_id_num_sql);
-		$id_num = $all_id_num->num_rows;
-		$id_num = $id_num + 1;
-		echo "id_num= " . $id_num . "<br>";
+		$post_role = $_POST['role'];
+		$post_studentId = $_POST['studentId'];
+		$post_name = $_POST['name'];
+		$post_department = $_POST['department'];
+
 		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
-		echo "cal_hashValue= " . $cal_hashValue . "<br>";
+		
+		//echo "status: id= ".$id_num." role= ".$post_role." studentID= ". $post_studentId." hash= ".$cal_hashValue." name= ".$post_name.
+		//" department= ".$post_department."<br>";
+		
+        $sql_insert = "INSERT INTO account (userRole, studentId ,hashValue ,userName ,department) VALUES ('$post_role', '$post_studentId',
+		 '$cal_hashValue', '$post_name', '$post_department')";
+		mysqli_query($db_link, $sql_insert);
+		$db_link->close();
 
-		$stmt->bind_param(
-			"iiissi",
-			$id_num,
-			getSQLValue($_POST["role"], "integer"),
-			getSQLValue($_POST["studentId"], "integer"),
-			$cal_hashValue,
-			getSQLValue($_POST["name"], "string"),
-			getSQLValue($_POST["department"], "integer")
-		);
+		$message="註冊成功";
+		echo "<script>alert('$message');
+		location.href='login.php';</script>";
 
-		$stmt->execute();
-		$stmt->close();
-		$db_link->close(); //重新導向回到主畫面
-
-
-		$message = "註冊成功";
-		echo "<script>alert('$message'); location.href='login.php';</script>";
-	} else {
-		$message = "輸入的兩次密碼不符，請重新輸入";
+	}
+	else{
+		$message="輸入的兩次密碼不符，請重新輸入";
 		echo "<script>alert('$message'); </script>";
 	}
 }
@@ -140,10 +102,10 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Role</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select  name ="role" class="custom-select" >
 								<option value="" selected disabled hidden></option>
-								<option name="boardsex" id="admin" value="0">Teacher</option>
-								<option name="boardsex" id="student" value="1">Student</option>
+								<option value="admin">Teacher</option>
+								<option value="student">Student</option>
 							</select>
 						</div>
 					</div>
@@ -155,15 +117,14 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">Department</label>
 							</div>
-							<select class="custom-select" id="department">
+							<select name ="department" class="custom-select" >
 								<option value="" selected disabled hidden></option>
-								<option value="0">資傳系</option>
-								<option value="1">資工系</option>
-								<option value="2">資英系</option>
+								<option value="資傳系">資傳系</option>
+								<option value="資工系">資工系</option>
+								<option value="資訊英專">資訊英專</option>
 							</select>
 						</div>
 					</div>
-
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">

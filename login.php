@@ -21,6 +21,7 @@ if (isset($_POST['login_info'])) {
 			$_SESSION["userRole"] = $row_result['userRole'];
 			$_SESSION["studentId"] = $row_result['studentId'];
 			$_SESSION["department"] = $row_result['department'];
+
 			$message = "登入成功";
 				echo "<script>alert('$message'); 
 				location.href = 'index.php';</script>";

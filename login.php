@@ -1,31 +1,31 @@
 <?
-if(isset($_POST['login_info'])){
-	session_start();	
-	if(isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){
-		if(isset($_POST["username"]) && isset($_POST["passwd"])){
+if (isset($_POST['login_info'])) {
+	session_start();
+	if (isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
+		if (isset($_POST["username"]) && isset($_POST["passwd"])) {
 			require_once("connectMysql.php");
 			$sql_query = "SELECT * FROM admin";
 			$result = $db_link->query($sql_query);
-			$row_result=$result->fetch_assoc();
+			$row_result = $result->fetch_assoc();
 			$username = $row_result["Id"];
 			$hashValue = $row_result["hashValue"];
-            $db_link->close();
-            $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
-			if(($username==$_POST["username"]) && ($password_check == 'true')){
-				$_SESSION["loginMember"]=$username;
-				$message="登入成功";
+			$db_link->close();
+			$password_check = password_verify($_POST["passwd"],  $hashValue);
+			if (($username == $_POST["username"]) && ($password_check == 'true')) {
+				$_SESSION["loginMember"] = $username;
+				$message = "登入成功";
 				echo "<script>alert('$message'); location.href = 'board.php';</script>";
-			}else if($username!=$_POST["username"]){
-				$message="username error, please relogin";
+			} else if ($username != $_POST["username"]) {
+				$message = "username error, please relogin";
 				echo "<script>alert('$message'); location.href = 'login.php';</script>";
-			}else if($passwd!=$_POST["passwd"]){
-				$message="password error, please relogin";
+			} else if ($passwd != $_POST["passwd"]) {
+				$message = "password error, please relogin";
 				echo "<script>alert('$message'); location.href = 'login.php';</script>";
 			}
 		}
 	}
 }
-	
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,12 +40,12 @@ if(isset($_POST['login_info'])){
 	<link rel="stylesheet" href="css/nav.css">
 	<title>登入</title>
 </head>
+
 <body>
 	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<a class="navbar-brand" href="index.php">課程評論管理系統</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -76,8 +76,7 @@ if(isset($_POST['login_info'])){
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<label for="psw"><b>Password</b></label>
-						<input class="form-control content" type="password" placeholder="Enter Password" name="passwd"
-							required>
+						<input class="form-control content" type="password" placeholder="Enter Password" name="passwd" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">

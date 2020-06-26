@@ -11,4 +11,3 @@
 		echo "connect to Database successful!"."<br>";
 		$db_link -> query("SET NAMES 'utf8'");
 	}
-?>

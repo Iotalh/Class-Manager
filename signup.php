@@ -1,5 +1,30 @@
-<<<<<<< Updated upstream
-=======
+<?
+if(isset($_POST['submit_info'])){
+	
+	if(isset($_POST["username"]) && isset($_POST["passwd"])){
+		require_once("connectMysql.php");
+		$sql_query = "SELECT * FROM admin";
+		$result = $db_link->query($sql_query);
+		$row_result=$result->fetch_assoc();
+		$username = $row_result["Id"];
+		$hashValue = $row_result["hashValue"];
+        $db_link->close();
+        $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
+		if(($username==$_POST["username"]) && ($password_check == 'true')){
+			$_SESSION["loginMember"]=$username;
+			$message="登入成功";
+			echo "<script>alert('$message'); location.href='board.php';</script>";
+		}else if($username!=$_POST["username"]){
+			$message="username error, please relogin";
+			echo "<script>alert('$message'); location.href='login.php';</script>";
+		}else if($passwd!=$_POST["passwd"]){
+			$message="password error, please relogin";
+			echo "<script>alert('$message'); location.href='login.php';</script>";
+		}
+	}
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,10 +41,17 @@
 			background: skyblue;
 		}
 		* {
-			font-family:"微軟正黑體";
+			font-family:"標楷體";
 		}
 		.container {
 			background: white;
+ 			text-align: center;
+			margin-right: auto;
+			margin-left: auto;
+			padding-right: 15px;
+			padding-left: 15px;
+			width: 50%;
+			max-width: 1140px;
 		}
 		img.sex {
 			width:25px;
@@ -31,6 +63,11 @@
 			border: 0;
 			width: 16px;
 		}
+		.select {
+  			position: relative;
+  			font-family: Arial;
+ 			text-align: center;
+		}
 	</style>
 </head>
 <body>
@@ -40,16 +77,30 @@
 				<h1 class="font-weight-bolder text-center">課程評論管理系統</h1>
 			</div>
 		</div>
-		<form method="POST" name = "formPost" action = "" onSubmit="return checkForm();">
-			<div class= "form-group row">
-				<label for="boardsubject" class="col-sm-2 col-form-label">ID</label>
-				<div class="col-sm-10">
-					<input type="text" placeholder="Enter Your Student ID" name="Id" required>
+		<br>
+			<form method="POST" name = "formPost" action = "" onSubmit="return checkForm();">
+
+
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon1">姓名</span>
 				</div>
+ 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="name" id="name">
 			</div>
+
+
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon1">學號</span>
+				</div>
+ 				<input type="text" class="form-control" placeholder="Enter Your Name" aria-label="Username" aria-describedby="basic-addon1"name="Id" id="Id">
+			</div>
+
+
+
 			<div class="row">
 				<legend class="col-form-label col-sm-2 pt-e">role</legend>
-				<div class="col-sm-10">
+				<div class="col-auto">
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="boardsex" id="admin" value="admin" checked>
 						<label class="form-check-label" for="boardsex1">
@@ -65,28 +116,37 @@
 				</div>
 			</div>
 
-			<div class="form-group row">
-				<label for="boardmail" class="col-sm-2 col-form-label">郵件</label>
-				<div class="col-sm-10">
-					<input type="email" class="form-control" name="boardmail" id="boardmail" placeholder="Email">
-				</div>
+
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+   					<label class="input-group-text" for="inputGroupSelect01">Department</label>
+  				</div>
+  				<select class="custom-select" id="department">
+				  	<option value="" selected disabled hidden>Department</option>
+    				<option value="資傳系">資傳系</option>
+    				<option value="資工系">資工系</option>
+    				<option value="資英系">資英系</option>
+  				</select>
 			</div>
-			<div class="form-group row">
-				<label for="boardweb" class="col-sm-2 col-form-label">web</label>
-				<div class="col-sm-10">
-					<input type="web" class="form-control" name="boardweb" id="boardweb" placeholder="Web">
+
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon1">Password</span>
 				</div>
+ 				<input type="password" class="form-control" placeholder="Enter Password"  aria-describedby="basic-addon1"name="passwd" required>
 			</div>
-			<div class="form-group row">
-				<label for="boardcontent" class="col-sm-2 col-form-label">留言内容</label>
-				<div class="col-sm-10">
-					<textarea class="form-control" name="boardcontent" id="boardcontent" rows="3"></textarea>
+
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon1">再次確認</span>
 				</div>
+ 				<input type="password" class="form-control" placeholder="Enter Password" aria-describedby="basic-addon1"name="passwd_check" required>
 			</div>
+
 			<div class="form-group row">
-				<div class="col-sm text-right" >
+				<div class="col-sm text-center" >
 					<input name="action" type="hidden" id="action" value="add">
-					<input class="btn btn-primary" type="submit" name="button" id="button" value="送出留言">
+					<input class="btn btn-primary" type="submit" name="submit_info" id="submit_info" value="送出註冊">
 					<input class="btn btn-primary" type="reset" name="button2" id="button2"value="重設資料">
 					<input class="btn btn-primary" type="button" name="button3" id="button3" value="回上一頁"onClick="window.history.back();">
 				</div>
@@ -95,4 +155,3 @@
 	</div>
 </body>
 
->>>>>>> Stashed changes

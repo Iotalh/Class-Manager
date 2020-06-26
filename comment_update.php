@@ -1,9 +1,8 @@
 <?php
-
 function getSQLValue($value, $type)
 {
 	switch ($type) {
-		case "text":
+		case "string":
 			$value = ($value != "") ? filter_var(
 				$value,
 				FILTER_SANITIZE_MAGIC_QUOTES
@@ -15,10 +14,16 @@ function getSQLValue($value, $type)
 				FILTER_SANITIZE_NUMBER_INT
 			) : "";
 			break;
-		case "enum":
+		case "email":
 			$value = ($value != "") ? filter_var(
 				$value,
-				FILTER_VALIDATE_INT
+				FILTER_VALIDATE_EMAIL
+			) : "";
+			break;
+		case "url":
+			$value = ($value != "") ? filter_var(
+				$value,
+				FILTER_VALIDATE_URL
 			) : "";
 			break;
 	}
@@ -28,25 +33,39 @@ function getSQLValue($value, $type)
 if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	// session_start();
 	// if ($_SESSION['id'] != null) {
-		$id = $_SESSION['id'];
-		require_once("connectMysql.php");
-		$sql_insert = "INSERT INTO class_manager (id ,class ,student ,createTime ,updateTime ,content ,sweetScore, hwScore, learnScore) VALUES ($id, ?, ?, Now(), Now(), ?, ?, ?, ?)";
-		$stmt = $db_link->prepare($sql_insert);
-		$stmt->bind_param(
-			"iisiii",
-			getSQLValue($_POST["class"], "int"),
-			getSQLValue($_POST["student"], "int"),
-			getSQLValue($_POST["content"], "text"),
-			getSQLValue($_POST["sweetScore"], "enum"),
-			getSQLValue($_POST["hwScore"], "enum"),
-			getSQLValue($_POST["learnScore"], "enum")
-		);
-		$stmt->execute();
+	include("connectMysql.php");
+	$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
+	if ($db_link->prepare($sql_insert)) {
+		echo "true";
+	} else {
+		echo "false";
+	}
+	$class = 1;
+	$student = 1;
+	$stmt = $db_link->prepare($sql_insert);
+	$stmt->bind_param("iisiii", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
+	if ($stmt->execute()) {
 		$stmt->close();
-		$db_link->close(); //重新導向回到主畫面
-		header("Location: index.php");
+		$db_link->close();
+		echo "<script>alert('Add successful'); location.href='pickData.php';</script>";
+	} else {
+		echo $stmt->error;
+		die('fail');
+	}
+	header("Location: index.php");
 	//}
 }
+if (isset($_GET["id"])) {
+	$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
+	$stmt = $db_link->prepare($sql_select);
+	$stmt->bind_param("i", $_GET["id"]);
+	if ($stmt->execute()) {
+		$stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
+		$stmt->fetch();
+		$stmt->close();
+	}
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -100,63 +119,58 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect01">課程甜度</label>
-					<select class="custom-select" id="sweetScore">
-						<option value="" selected disabled hidden></option>
-						<option value="0">0</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
+					<select class="custom-select" id="sweetScore" name="sweetScore">
+						<?php
+						if (isset($sweetScore)) {
+							echo "<option value='$sweetScore'>$sweetScore</option>";
+						} else {
+							echo "<option value='' selected disabled hidden></option>";
+						}
+						for ($i = 0; $i <= 10; $i++) {
+							echo "<option value='$i'>$i</option>";
+						}
+						?>
 					</select>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect02">作業壓力</label>
-					<select class="custom-select" id="hwScore">
-						<option value="" selected disabled hidden></option>
-						<option value="0">0</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
+					<select class="custom-select" id="hwScore" name="hwScore">
+						<?php
+						if (isset($hwScore)) {
+							echo "<option value='$hwScore'>$hwScore</option>";
+						} else {
+							echo "<option value='' selected disabled hidden></option>";
+						}
+						for ($i = 0; $i <= 10; $i++) {
+							echo "<option value='$i'>$i</option>";
+						}
+						?>
 					</select>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect03">天文指數</label>
-					<select class="custom-select" id="learnScore">
-						<option value="" selected disabled hidden></option>
-						<option value="0">0</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
+					<select class="custom-select" id="learnScore" name="learnScore">
+						<?php
+						if (isset($learnScore)) {
+							echo "<option value='$learnScore'>$learnScore</option>";
+						} else {
+							echo "<option value='' selected disabled hidden></option>";
+						}
+						for ($i = 0; $i <= 10; $i++) {
+							echo "<option value='$i'>$i</option>";
+						}
+						?>
+
 					</select>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" placeholder="輸入留言內容"></textarea>
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容"></textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -176,14 +190,41 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	var $sweet = $("#sweetScore");
 	var $hw = $("#hwScore");
 	var $learn = $("#learnScore");
-
+	var $content = $("#content");
 	$sweet.focusout(function() {
 		if ($(this).val() != null) {
 			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
 		} else {
 			$(this).addClass("is-invalid");
 			$(this).removeClass("is-valid");
-			console.log("null");
+		}
+	});
+	$hw.focusout(function() {
+		if ($(this).val() != null) {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
+		}
+	});
+	$learn.focusout(function() {
+		if ($(this).val() != null) {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
+		}
+	});
+	$content.focusout(function() {
+		if ($(this).val() != "") {
+			$(this).removeClass("is-invalid");
+			$(this).addClass("is-valid");
+		} else {
+			$(this).addClass("is-invalid");
+			$(this).removeClass("is-valid");
 		}
 	});
 </script>

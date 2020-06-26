@@ -1,0 +1,15 @@
+.content {
+    color: #343a40;
+    height: 450px !important;
+    overflow-x: visible;
+    overflow-y: visible;
+}
+
+.post-btns {
+    margin: 5px 20px;
+    
+}
+
+.post {
+    margin: 60px auto;
+}

@@ -1,9 +1,9 @@
 <?
 if(isset($_POST['submit_info'])){
 	
-	if(isset($_POST["username"]) && isset($_POST["passwd"])){
+	if(isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])){
 		require_once("connectMysql.php");
-		$sql_query = "SELECT * FROM admin";
+		$sql_query = "SELECT * FROM account";
 		$result = $db_link->query($sql_query);
 		$row_result=$result->fetch_assoc();
 		$username = $row_result["Id"];
@@ -21,6 +21,10 @@ if(isset($_POST['submit_info'])){
 			$message="password error, please relogin";
 			echo "<script>alert('$message'); location.href='login.php';</script>";
 		}
+	}
+	else{
+		$message="輸入的兩次密碼不符，請重新輸入";
+		echo "<script>alert('$message'); location.href='login.php';</script>";
 	}
 }
 ?>

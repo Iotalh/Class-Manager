@@ -11,6 +11,7 @@ if(isset($_POST['login_info'])){
 			$hashValue = $row_result["hashValue"];
             $db_link->close();
             $password_check = password_verify ( $_POST["passwd"] ,  $hashValue);
+
 			if(($username==$_POST["username"]) && ($password_check == 'true')){
 				$_SESSION["loginMember"]=$username;
 				$message="登入成功";
@@ -69,7 +70,7 @@ if(isset($_POST['login_info'])){
 		<form method="POST" name = "loginMember" action = "">
 
       		<label for="uname"><b>Username</b></label>
-     		<input type="text" placeholder="Enter Username" name="username" required>
+     		<input type="text" placeholder="Enter ID" name="username" required>
 
       		<label for="psw"><b>Password</b></label>
       		<input type="password" placeholder="Enter Password" name="passwd" required>

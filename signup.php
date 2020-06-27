@@ -1,16 +1,16 @@
 <?
-$_POST["studentID"] = NULL;
+$_POST["studentId"] = NULL;
 if (isset($_POST['submit_info'])) {
 	include("connectMysql.php");
 
-	$post_studentID = $_POST["studentID"];
+	$post_studentId = $_POST["studentId"];
 	$sql_query = "SELECT * FROM account ORDER BY id ";
 	$result = $db_link->query($sql_query);
 
 	$test = false;
 	while($row_result = $result->fetch_assoc())
 	{
-		if($row_result['studentID'] == $post_studentID)
+		if($row_result['studentId'] == $post_studentId)
 		{
 			$test = true;
 		}

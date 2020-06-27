@@ -19,7 +19,7 @@ include("connectMysql.php");
 	$stmt -> execute();
 	$stmt -> bind_result($department, $department, $semester, $classId, $credit, $title, $teacher, $link);
 	$stmt -> fetch();
-	echo "c".$i.$department. $department. $semester. $classId. $credit. $title. $teacher. $link."c"."<br>";
+	//echo "c".$i.$department. $department. $semester. $classId. $credit. $title. $teacher. $link."c"."<br>";
 
 ?>
 

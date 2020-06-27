@@ -59,7 +59,7 @@ $result = $db_link->query($sql_query);
 			</div>
 		</nav>
 		<div class="container">
-			<table class="table table-hover table-dark">
+			<table class="table table-dark">
 				<thead>
 					<tr>
 						<th scope="col">#</th>
@@ -78,9 +78,9 @@ $result = $db_link->query($sql_query);
 							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
-							<td><? echo nl2br($row_RecClass["title"]); ?> </td>
+							<td><a class="btn btn-dark btn-sm" href="comment_list.php?classId=<?php echo $row_RecClass["id"]?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">連結</a></td>
+							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
 						</tr>
 					<? } ?>
 				</tbody>

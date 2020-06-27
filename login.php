@@ -17,6 +17,7 @@ if (isset($_POST['login_info'])) {
 		$db_link->close();
 		$password_check = password_verify($post_passwd,  $hashValue);
 		if (($studentID == $post_studentID) && ($password_check == 'true')) {
+			$_SESSION["id"] = $row_result["id"];
 			$_SESSION["userName"] = $row_result['userName'];
 			$_SESSION["userRole"] = $row_result['userRole'];
 			$_SESSION["studentId"] = $row_result['studentId'];

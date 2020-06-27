@@ -60,7 +60,7 @@ if(	$_SESSION["userRole"] != 'admin')
 							<a class="col nav-link nav-btn" href="logout.php">登出</a>
 						<? } else { ?>
 							<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-							<a class="col nav-link nav-btn" href="#.php">課程</a>
+							<a class="col nav-link nav-btn" href="#.php"><?echo$_SESSION["userRole"]?></a>
 							<a class="col nav-link nav-btn" href="logout.php">登出</a>
 
 						<? } ?>

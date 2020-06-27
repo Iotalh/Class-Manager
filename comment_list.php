@@ -1,13 +1,14 @@
 <?php
-if (isset($_GET["class"])) {
-    require_once("connectMysql.php");
-    $class = $_GET["class"];
-    $sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE class=? ORDER BY createTime ASC";
-    $stmt = $db_link->prepare($sql_select);
-    $stmt->bind_param("i", $class);
-    if ($stmt->execute()) {
-        $stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
-
+// if (isset($_GET["class"])) {
+header("Content-Type: text/html; charset=utf-8");
+require_once("connectMysql.php");
+// $class = $_GET["class"];
+$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment ORDER BY createTime ASC";
+$comments = $db_link->query($sql_select);
+$sql_user = "SELECT id, userName FROM account";
+$user = $db_link->query($sql_user);
+// session_start();
+// if($_SESSION[""])
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,19 +49,33 @@ if (isset($_GET["class"])) {
         </nav>
     </header>
 
-    <div class="container-fluid comment-list text-white bg-dark">
-        <?php while ($row = $stmt->fetch()) { ?>
+    <div class="container comment-list text-white bg-dark">
+        <?php while ($row = $comments->fetch_assoc()) {
+            $userdata = $user->fetch_assoc();
+        ?>
             <div class="row">
                 <div class="col-sm">
                     <div class="card boder-primary mb-3">
                         <div class="card-header">
-                            <span class="badge badge-pill badge-secondary"><? echo $row['id'] ?></span>
-                            <span class="badge badge-primary"><? echo $row['name'] ?></span>
-                            <span class="badge badge-pill badge-secondary"><? echo $row['createTime'] ?></span>
-                            <span class="badge badge-pill badge-secondary"><? echo $row['updateTime'] ?></span>
+                            <span class="badge badge-pill badge-secondary">
+                                <? echo $row["id"] ?></span>
+                            <?
+                            if (isset($userdata["userName"])) {
+                                echo "<span class='badge badge-primary'>" . $userdata["userName"] . "</span>";
+                            }else{
+                                echo "<span class='badge badge-primary'>匿名ㄉ朋友</span>";
+                            }
+                            ?>
+
+                            <span class="badge badge-pill badge-secondary">
+                                <? echo $row["createTime"] ?></span>
+                            <span class="badge badge-pill badge-secondary">
+                                <? echo $row["updateTime"] ?></span>
                         </div>
                         <div class="card-body text-secondary">
-                            <p class="card-text"><? echo nl2br($row['content']) ?></p>
+                            <p class="card-text">
+                                <? echo nl2br($row["content"]) ?>
+                            </p>
                         </div>
 
                     </div>
@@ -74,7 +89,5 @@ if (isset($_GET["class"])) {
 
 </html>
 <?php
-        $stmt->close();
-    }
-}
+// }
 ?>

@@ -75,7 +75,7 @@
 						<td><?echo nl2br($row_RecClass["credit"]);?> </td>
 						<td><?echo nl2br($row_RecClass["title"]);?> </td>
 						<td><?echo nl2br($row_RecClass["teacher"]);?> </td>
-						<td><a href="<?$row_RecClass["link"]?>" target="_blank" >課程資料</a></td>
+						<td><a href="<?echo$row_RecClass["link"]?>">課程資料</a></td>
 					</tr>
 				<?}?>
 				</table>

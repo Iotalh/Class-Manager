@@ -1,9 +1,9 @@
 <?
-$_POST["studentId"] = NULL;
 if (isset($_POST['submit_info'])) {
 	include("connectMysql.php");
 
 	$post_studentId = $_POST["studentId"];
+	echo "post_studentId= ".$post_studentId."<br>";
 	$sql_query = "SELECT * FROM account ORDER BY id ";
 	$result = $db_link->query($sql_query);
 
@@ -12,16 +12,15 @@ if (isset($_POST['submit_info'])) {
 	{
 		if($row_result['studentId'] == $post_studentId)
 		{
+			echo "ccc";
 			$test = true;
 		}
 	}
-
 
 	if($test != true){
 
 		if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
 
-			$post_studentId = $_POST['studentId'];
 			$post_role = $_POST['role'];
 			$post_name = $_POST['name'];
 			$post_department = $_POST['department'];
@@ -38,7 +37,7 @@ if (isset($_POST['submit_info'])) {
 
 			$message="註冊成功";
 			echo "<script>alert('$message');
-			location.href='login.php';</script>";
+			//location.href='login.php';</script>";
 
 		}
 		else{
@@ -51,7 +50,7 @@ if (isset($_POST['submit_info'])) {
 
 	}
 	
-	echo "<script>location.href='signup.php';</script>";
+	//echo "<script>location.href='signup.php';</script>";
 
 }
 ?>
@@ -117,7 +116,7 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">學號</span>
 							</div>
-							<input type="text" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" name="studentId" id="studentId">
+							<input type="text" name="studentId" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" id="studentId">
 						</div>
 					</div>
 				</div>

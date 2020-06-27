@@ -5,7 +5,6 @@ include("connectMysql.php");
 $sql_query = "SELECT * FROM class ORDER BY id ASC";
 $result = $db_link->query($sql_query);
 
-
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +49,7 @@ $result = $db_link->query($sql_query);
 							<a class="col nav-link nav-btn" href="logout.php">登出</a>
 						<? } else { ?>
 							<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-							<a class="col nav-link nav-btn" href="#.php">編輯課程</a>
+							<a class="col nav-link nav-btn" href="class_edit.php">編輯</a>
 							<a class="col nav-link nav-btn" href="logout.php">登出</a>
 
 						<? } ?>

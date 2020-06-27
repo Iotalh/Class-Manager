@@ -1,5 +1,4 @@
 <?
-
 include("connectMysql.php");
 	if(isset($_POST['submit_info'])){
 		$sql_query= "UPDATE class SET department=?, semester=?, classId=?, credit=?, title=?, teacher=?, link=? where id=?";
@@ -20,6 +19,7 @@ include("connectMysql.php");
 	$stmt -> execute();
 	$stmt -> bind_result($department, $department, $semester, $classId, $credit, $title, $teacher, $link);
 	$stmt -> fetch();
+	echo "c".$i.$department. $department. $semester. $classId. $credit. $title. $teacher. $link."c"."<br>";
 
 ?>
 

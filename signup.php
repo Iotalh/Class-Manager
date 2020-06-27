@@ -1,33 +1,58 @@
 <?
+$_POST["studentID"] = NULL;
 if (isset($_POST['submit_info'])) {
+	include("connectMysql.php");
 
-	if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
-		require_once("connectMysql.php");
+	$post_studentID = $_POST["studentID"];
+	$sql_query = "SELECT * FROM account ORDER BY id ";
+	$result = $db_link->query($sql_query);
 
-		$post_role = $_POST['role'];
-		$post_studentId = $_POST['studentId'];
-		$post_name = $_POST['name'];
-		$post_department = $_POST['department'];
-
-		$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
-		
-		//echo "status: id= ".$id_num." role= ".$post_role." studentID= ". $post_studentId." hash= ".$cal_hashValue." name= ".$post_name.
-		//" department= ".$post_department."<br>";
-		
-        $sql_insert = "INSERT INTO account (userRole, studentId ,hashValue ,userName ,department) VALUES ('$post_role', '$post_studentId',
-		 '$cal_hashValue', '$post_name', '$post_department')";
-		mysqli_query($db_link, $sql_insert);
-		$db_link->close();
-
-		$message="註冊成功";
-		echo "<script>alert('$message');
-		location.href='login.php';</script>";
-
+	$test = false;
+	while($row_result = $result->fetch_assoc())
+	{
+		if($row_result['studentID'] == $post_studentID)
+		{
+			$test = true;
+		}
 	}
-	else{
-		$message="輸入的兩次密碼不符，請重新輸入";
+
+
+	if($test != true){
+
+		if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
+
+			$post_studentId = $_POST['studentId'];
+			$post_role = $_POST['role'];
+			$post_name = $_POST['name'];
+			$post_department = $_POST['department'];
+
+			$cal_hashValue = password_hash($_POST["passwd"], PASSWORD_BCRYPT);
+
+			//echo "status: id= ".$id_num." role= ".$post_role." studentID= ". $post_studentId." hash= ".$cal_hashValue." name= ".$post_name.
+			//" department= ".$post_department."<br>";
+
+		    $sql_insert = "INSERT INTO account (userRole, studentId ,hashValue ,userName ,department) VALUES ('$post_role', '$post_studentId',
+			 '$cal_hashValue', '$post_name', '$post_department')";
+			mysqli_query($db_link, $sql_insert);
+			$db_link->close();
+
+			$message="註冊成功";
+			echo "<script>alert('$message');
+			location.href='login.php';</script>";
+
+		}
+		else{
+			$message="輸入的兩次密碼不符，請重新輸入";
+			echo "<script>alert('$message'); </script>";
+		}
+	}else{
+		$message="此學號已經註冊過摟";
 		echo "<script>alert('$message'); </script>";
+
 	}
+	
+	echo "<script>location.href='signup.php';</script>";
+
 }
 ?>
 

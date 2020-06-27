@@ -1,6 +1,10 @@
 <?
-	// require_once("connectMysql.php");
-	// session_start();
+	session_start();
+	header("Connect-Type: text/html; charset = utf-8");
+	include("connectMysql.php");
+	$sql_query = "SELECT * FROM class ORDER BY id ASC";
+	$result = $db_link->query($sql_query);
+
 	
 ?>
 
@@ -35,14 +39,51 @@
 				</ul>
 				<div class="row nav-item justify-content-end">
 					<!-- <a class="col nav-link nav-btn" href="#" hiddden><? // echo $_SESSION["userName"]?></a> -->
-					<a class="col nav-link nav-btn" href="login.php">登入</a>
-					<a class="col nav-link nav-btn" href="signup.php">註冊</a>
-					<a class="col nav-link nav-btn" href="logout.php">登出</a>
+					<?
+						if ($_SESSION["userName"] == NULL){?>
+							<a class="col nav-link nav-btn" href="login.php">登入</a>
+							<a class="col nav-link nav-btn" href="signup.php">註冊</a>
+						<?}else{
+							if($_SESSION["userRole"] == "student"){?>
+								<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"]?></a>
+								<a class="col nav-link nav-btn" href="logout.php">登出</a>
+							<?}else{?>
+								<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"]?></a>
+								<a class="col nav-link nav-btn" href="#.php">編輯課程</a>
+								<a class="col nav-link nav-btn" href="logout.php">登出</a>
+								
+							<?}?>
+						<?}?>
 				</div>
+				
+
+				<table border="1">
+				<tr>
+					<td>ID</td>
+					<td>系所</td>
+					<td>學期</td>
+					<td>學分</td>
+					<td>課程名稱</td>
+					<td>導師</td>
+					<td>課程頁面</td>
+				</tr>
+				<?while($row_RecClass = $result->fetch_assoc()){?>
+					<tr>
+						<td><?echo nl2br($row_RecClass["id"]);?> </td>
+						<td><?echo nl2br($row_RecClass["department"]);?> </td>
+						<td><?echo nl2br($row_RecClass["semester"]);?> </td>
+						<td><?echo nl2br($row_RecClass["credit"]);?> </td>
+						<td><?echo nl2br($row_RecClass["title"]);?> </td>
+						<td><?echo nl2br($row_RecClass["teacher"]);?> </td>
+						<td><a href="<?echo$row_RecClass["link"]?>">課程資料</a></td>
+					</tr>
+				<?}?>
+				</table>
+
+
+
 			</div>
 		</nav>
-
-
 
 
 

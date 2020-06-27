@@ -1,6 +1,7 @@
 <?
 	session_start();
 	if(isset($_SESSION["userName"]) != NULL){
+		$_SESSION["id"] = NULL;
 		$_SESSION["userName"] = NULL;
 		$_SESSION["userRole"] = NULL;
 		$_SESSION["studentId"] = NULL;

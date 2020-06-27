@@ -33,24 +33,30 @@ function getSQLValue($value, $type)
 }
 session_start();
 
-if (!isset($_SESSION['userName'])) { // isset($_GET["class"]) &&
+if (!isset($_SESSION["id"])) { // isset($_GET["class"]) &&
 	echo "<script>alert('請先登入'); location.href = 'login.php';</script>";
 }
 
-$class = 1;
-$student = $_SESSION['userName'];
+$class = $_GET["classId"];
+$student = $_SESSION["id"];
 if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	include("connectMysql.php");
 	$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
-	$db_link->prepare($sql_insert);
+	if($db_link->prepare($sql_insert)){
+		echo "true";
+	}else{
+		echo "false";
+	}
 	$stmt = $db_link->prepare($sql_insert);
 	$stmt->bind_param("iisiii", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
 	if ($stmt->execute()) {
 		$stmt->close();
 		$db_link->close();
-		echo "<script>alert('新增成功'); location.href='index.php';</script>";
+		echo "新增成功";
+		// echo "<script>alert('新增成功'); location.href='index.php';</script>";
 	} else {
-		echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+		// echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+		echo $stmt->error;
 		die();
 	}
 }

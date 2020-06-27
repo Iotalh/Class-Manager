@@ -1,25 +1,42 @@
 <?
 include("connectMysql.php");
 	if(isset($_POST['submit_info'])){
-		$sql_query= "UPDATE class SET department=?, semester=?, classId=?, credit=?, title=?, teacher=?, link=? where id=?";
-		$stmt = $db_link->prepare($sql_query);
-		$stmt -> bind_param("sisisss", $_POST['department'], $_POST['semester'], $_POST['classId'], $_POST['credit'], 
-		$_POST['title'], $_POST['teacher'], $_POST['link']);
-		$stmt->execute();
-		$stmt->close();
+		$id = $_POST['id'];
+		$department = $_POST['department'];
+
+		$semester = $_POST['semester'];
+		$classId = $_POST['classId'];
+		$credit = $_POST['credit'];
+		$title = $_POST['title'];
+		$teacher = $_POST['teacher'];
+		$link = $_POST['link'];
+		echo "c".$id. $department. $semester. $classId. $credit. $title. $teacher. $link."    c"."<br>";
+
+		$sql_query= "UPDATE class SET department = $department, semester = $semester, classId = $classId, credit = $credit, 
+		title = $title, teacher = $teacher, link = $link where id = $id";
+
+		mysqli_query($db_link,$sql_query);
 		$db_link->close();
-		header("location: update.php");
+
 		$message = "課程資料更新成功!";
 		echo "<script>alert('$message'); </script>";
-		echo "<script>location.href='signup.php';</script>";
+		//echo "<script>location.href='class_edit.php';</script>";
+	}else{
+	$get_userid= $_GET["id"];
+	$sql_select = "SELECT * FROM class WHERE id = $get_userid";
+	$result = mysqli_query($db_link, $sql_select);
+	$row_result = mysqli_fetch_assoc($result);
+
+	$id = $row_result['id'];
+	$department = $row_result['department'];
+	$semester = $row_result['semester'];
+	$classId = $row_result['classId'];
+	$credit = $row_result['credit'];
+	$title = $row_result['title'];
+	$teacher = $row_result['teacher'];
+	echo "c".$id. $department. $semester. $classId. $credit. $title. $teacher. $link."c"."<br>";
+	$link = $row_result['link'];
 	}
-	$sql_select = "SELECT id, department, semester, classId, credit, title, teacher, link FROM class WHERE id = ?";
-	$stmt = $db_link->prepare($sql_select);
-	$stmt -> bind_param("i", $_GET["id"]);
-	$stmt -> execute();
-	$stmt -> bind_result($department, $department, $semester, $classId, $credit, $title, $teacher, $link);
-	$stmt -> fetch();
-	//echo "c".$i.$department. $department. $semester. $classId. $credit. $title. $teacher. $link."c"."<br>";
 
 ?>
 
@@ -89,8 +106,8 @@ include("connectMysql.php");
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">學期</label>
 							</div>
-							<select  name ="semester" class="custom-select" >
-							　	<option value="" selected disabled hidden><?php echo $semester; ?></option>
+							<select name ="semester" class="custom-select" >
+							　	<option value="" selected disabled hidden><?php echo$semester; ?></option>
 								<option value="1071">1071</option>
 								<option value="1072">1072</option>
 								<option value="1081">1081</option>
@@ -155,9 +172,6 @@ include("connectMysql.php");
 						</div>
 					</div>
 				</div>
-
-
-
 
 				<div class="form-group row justify-content-md-center">
 					<div class="col-8">

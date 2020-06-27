@@ -60,7 +60,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 if (isset($_GET["id"])) {
 	include("connectMysql.php");
 	$id = $_GET["id"];
-	$sql_select = "SELECT * FROM comment WHERE id=?";
+	$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
 	$stmt = $db_link->prepare($sql_select);
 	$stmt->bind_param("i", $_GET["id"]);
 	if ($stmt->execute()) {

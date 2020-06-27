@@ -1,4 +1,6 @@
 <?php
+header("Content-Type: text/html; charset=utf-8");
+
 function getSQLValue($value, $type)
 {
 	switch ($type) {
@@ -29,43 +31,38 @@ function getSQLValue($value, $type)
 	}
 	return $value;
 }
+session_start();
 
+if (!isset($_SESSION['userName'])) { // isset($_GET["class"]) &&
+	echo "<script>alert('請先登入'); location.href = 'login.php';</script>";
+}
+
+$class = 1;
+$student = $_SESSION['userName'];
 if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
-	// session_start();
-	// if ($_SESSION['id'] != null) {
 	include("connectMysql.php");
 	$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
-	if ($db_link->prepare($sql_insert)) {
-		echo "true";
-	} else {
-		echo "false";
-	}
-	// $class = $_GET["class"];
-	// $student = $_SESSION['id'];
-	$class = 1;
-	$student = 1;
+	$db_link->prepare($sql_insert);
 	$stmt = $db_link->prepare($sql_insert);
 	$stmt->bind_param("iisiii", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
 	if ($stmt->execute()) {
 		$stmt->close();
 		$db_link->close();
-		echo "<script>alert('Add successful'); location.href='pickData.php';</script>";
+		echo "<script>alert('新增成功'); location.href='index.php';</script>";
 	} else {
-		echo $stmt->error;
-		die('fail');
+		echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+		die();
 	}
-	header("Location: index.php");
-	//}
 }
-if (isset($_GET["id"])) {
-	include("connectMysql.php");
-	$id = $_GET["id"];
-	$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
-	$stmt = $db_link->prepare($sql_select);
-	$stmt->bind_param("i", $_GET["id"]);
-	if ($stmt->execute()) {
-		$stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
-		$stmt->fetch();
+// if (isset($_GET["id"])) {
+// 	include("connectMysql.php");
+// 	$id = $_GET["id"];
+// 	$sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
+// 	$stmt = $db_link->prepare($sql_select);
+// 	$stmt->bind_param("i", $_GET["id"]);
+// 	if ($stmt->execute()) {
+// 		$stmt->bind_result($id, $class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
+// 		$stmt->fetch();
 ?>
 		<!DOCTYPE html>
 		<html lang="en">
@@ -233,7 +230,7 @@ if (isset($_GET["id"])) {
 			});
 		</script>
 <?php
-		$stmt->close();
-	}
-}
+	// 	$stmt->close();
+	// }
+
 ?>

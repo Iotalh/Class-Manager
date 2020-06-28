@@ -17,7 +17,7 @@ $sql_select = "SELECT department, semester, classId, credit, title, teacher, lin
 $stmt = $db_link->prepare($sql_select);
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
-$stmt->bind_result($id, $department, $semester, $classId, $credit, $title, $teacher, $link);
+$stmt->bind_result($department, $semester, $classId, $credit, $title, $teacher, $link);
 $stmt->fetch();
 ?>
 

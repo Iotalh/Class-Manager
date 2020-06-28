@@ -36,31 +36,33 @@ session_start();
 if (!isset($_SESSION["id"])) { // isset($_GET["class"]) &&
 	echo "<script>alert('請先登入'); location.href = 'login.php';</script>";
 }
-
-$class = $_GET["classId"];
-$student = $_SESSION["id"];
-if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
+if (isset($_GET["classId"])) {
 	include("connectMysql.php");
-	$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
-	if($db_link->prepare($sql_insert)){
-		echo "true";
-	}else{
-		echo "false";
+	$classId = $_GET["classId"];
+	$student = $_SESSION["id"];
+	$sql_class_select = "SELECT title FROM class WHERE id=?";
+	$class_stmt = $db_link->prepare($sql_class_select);
+	$class_stmt->bind_param("i", $classId);
+	if ($class_stmt->execute()) {
+		$class_stmt->bind_result($classTitle);
+		$class_stmt->fetch();
 	}
-	$stmt = $db_link->prepare($sql_insert);
-	$stmt->bind_param("iisiii", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
-	if ($stmt->execute()) {
-		$stmt->close();
-		$db_link->close();
-		echo "新增成功";
-		// echo "<script>alert('新增成功'); location.href='index.php';</script>";
-	} else {
-		// echo "<script>alert('新增失敗'); location.href='index.php';</script>";
-		echo $stmt->error;
-		die();
+	if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
+		$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
+		$stmt = $db_link->prepare($sql_insert);
+		$stmt->bind_param("iisiii", $classId, $student, getSQLValue($_POST["content"], "string"), $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
+		if ($stmt->execute()) {
+			$stmt->close();
+			$db_link->close();
+			// echo "新增成功";
+			echo "<script>alert('新增成功'); location.href='index.php';</script>";
+		} else {
+			echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+			echo $stmt->error;
+			die();
+		}
 	}
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,8 +108,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		<form action="" method="post" name="formPost" onsubmit="return checkForm();">
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<input type="text" name="title" id="title" class="form-control" placeholder="留言課程名稱">
-					<!-- 利用 get 或 post 擷取 留言的課程 -->
+					<input type="text" name="title" id="title" class="form-control" placeholder="留言課程名稱" value="<? echo $classTitle; ?>" readonly>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -146,7 +147,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
-					<label for="inputGroupSelect03">天文指數</label>
+					<label for="inputGroupSelect03">學習狀況</label>
 					<select class="custom-select" id="learnScore" name="learnScore">
 						<?php
 						if (isset($learnScore)) {
@@ -164,12 +165,13 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容" value="
-					<?php
-					if (isset($content)) {
-						echo $content;
-					}
-					?>"></textarea>
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容">
+						<?php
+						if (isset($content)) {
+							echo $content;
+						}
+						?>
+					</textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -227,3 +229,6 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		}
 	});
 </script>
+<?
+$class_stmt->close();
+?>

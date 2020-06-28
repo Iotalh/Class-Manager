@@ -44,7 +44,7 @@ $db_link->close();
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="index.php">課程清單 <span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
 				<? if ($_SESSION["userRole"] != "student") { ?>
@@ -64,7 +64,7 @@ $db_link->close();
 						<th scope="col">學分</th>
 						<th scope="col">課程名稱</th>
 						<th scope="col">導師</th>
-						<th scope="col">課程頁面</th>
+						<th scope="col">課程連結</th>
 						<th scope="col">編輯</th>
 					</tr>
 				</thead>
@@ -77,7 +77,7 @@ $db_link->close();
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
 							<td><a class="btn btn-dark btn-sm" href="comment_read.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
+							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程連結</a></td>
 
 							<td><a class="btn btn-dark btn-sm" href='class_update.php?id=<? echo $row_RecClass["id"] ?>'>修改</a>
 								<a class="btn btn-dark btn-sm" href='class_delete.php?id=<? echo $row_RecClass["id"] ?>'>刪除</a></td>

@@ -20,6 +20,7 @@ $db_link->close();
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/nav.css">
+	<link rel="stylesheet" href="css/index.css">
 	<title>課程評論管理系統</title>
 </head>
 
@@ -34,7 +35,7 @@ $db_link->close();
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="index.php">課程清單 <span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
 				<?
@@ -47,39 +48,46 @@ $db_link->close();
 						<a class="btn btn-dark float-right" href="class_edit.php">編輯</a>
 					<? } ?>
 					<a class="btn btn-dark float-right" href="logout.php">登出</a>
-
 				<? } ?>
 			</div>
 		</nav>
-		<div class="container">
-			<table class="table table-dark">
-				<thead>
-					<tr>
-						<th scope="col">課號</th>
-						<th scope="col">系所</th>
-						<th scope="col">學期</th>
-						<th scope="col">學分</th>
-						<th scope="col">課程名稱</th>
-						<th scope="col">導師</th>
-						<th scope="col">課程頁面</th>
-					</tr>
-				</thead>
-				<tbody>
-					<? while ($row_RecClass = $result->fetch_assoc()) { ?>
-						<tr>
-							<th scope="row"><? echo nl2br($row_RecClass["classId"]); ?> </th>
-							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
-							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
-							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="comment_read.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
-							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
-						</tr>
-					<? } ?>
-				</tbody>
-			</table>
-		</div>
 	</header>
+	<div class="container info">
+		<div class="alert alert-dark" role="alert">
+			<ul class="class-info">
+				<li>點選課名查看評論</li>
+				<li>點選課程連結查看課程資訊</li>
+			</ul>
+		</div>
+	</div>
+	<div class="container">
+		<table class="table table-dark">
+			<thead>
+				<tr>
+					<th scope="col">課號</th>
+					<th scope="col">系所</th>
+					<th scope="col">學期</th>
+					<th scope="col">學分</th>
+					<th scope="col">課程名稱</th>
+					<th scope="col">導師</th>
+					<th scope="col">課程連結</th>
+				</tr>
+			</thead>
+			<tbody>
+				<? while ($row_RecClass = $result->fetch_assoc()) { ?>
+					<tr>
+						<th scope="row"><? echo nl2br($row_RecClass["classId"]); ?> </th>
+						<td><? echo nl2br($row_RecClass["department"]); ?> </td>
+						<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
+						<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
+						<td><a class="btn btn-dark btn-sm" href="comment_read.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
+						<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
+						<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程連結</a></td>
+					</tr>
+				<? } ?>
+			</tbody>
+		</table>
+	</div>
 </body>
 
 </html>

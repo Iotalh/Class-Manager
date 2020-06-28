@@ -1,37 +1,76 @@
 <?
+session_start();
+header("Connect-Type: text/html; charset = utf-8");
 include("connectMysql.php");
-if (isset($_GET["id"])) {
-	$id = $_GET["id"];
-	$sql_select = "SELECT department, semester, classId, credit, title, teacher, link FROM class WHERE id=?";
-	$stmt = $db_link->prepare($sql_select);
-	$stmt->bind_param("i", $id);
-	$stmt->execute();
-	$stmt->bind_result($department, $semester, $classId, $credit, $title, $teacher, $link);
-	$stmt->fetch();
-	$stmt->close();
-
-	if (isset($_POST['action']) && $_POST["action"] == "update") {
-		$sql_query = "UPDATE class SET department=?, semester=?, classId=?, credit=?, title=?, teacher=?, link=? where id=?";
-		$stmt = $db_link->prepare($sql_query);
-		$stmt->bind_param('sssisssi', $_POST['department'], $_POST['semester'], $_POST['classId'], $_POST['credit'], $_POST['title'], $_POST['teacher'], $_POST['link'], $_POST['id']);
-		if ($stmt->execute()) {
-			$stmt->close();
-			$db_link->close();
-			$message = "課程資料更新成功!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
-			//echo "<script>location.href='class_edit.php';</script>";
-		} else {
-			$message = "課程資料更新失敗!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
-		}
-	}
+$sql_query = "SELECT * FROM class ORDER BY id ASC";
+$result = $db_link->query($sql_query);
+if ($_SESSION["userRole"] != 'admin') { //測試是不是管理者
+	$_SESSION["id"] = NULL;
+	$_SESSION["userName"] = NULL;
+	$_SESSION["userRole"] = NULL;
+	$_SESSION["studentId"] = NULL;
+	$_SESSION["department"] = NULL;
+	$message = "錯誤!你不是管理者!!!!!即將回到首頁並登出";
+	echo "<script>alert('$message'); 
+	location.href = 'index.php';</script>";
 }
 
+if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
+	include("connectMysql.php");
+	
+	$post_department = $_POST["department"];
+	$post_title = $_POST["title"];
+	$sql_query = "SELECT * FROM class ORDER BY title ";
+	$result = $db_link->query($sql_query);
 
+	$test = false;
+	while($row_result = $result->fetch_assoc())
+	{
+		if($row_result['title'] == $post_title)
+		{
+			$test = true;
+		}
+	}
+	$sql_query_2 = "SELECT * FROM class ORDER BY department";
+	$result_2 = $db_link->query($sql_query);
+
+	while($row_result_2 = $result_2->fetch_assoc())
+	{
+		if($row_result_2['department'] == $post_department)
+		{
+			$test = true;
+		}
+	}
+
+	if($test != true){
+		$post_semester = $_POST["semester"];
+		$post_classId = $_POST["classId"];
+		$post_credit = $_POST["credit"];
+		$post_teacher = $_POST["teacher"];
+		$post_link = $_POST["link"];
+
+
+		//echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
+		//" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
+
+		$sql_insert = "INSERT INTO class (department, semester ,classId ,credit ,title, teacher, link) 
+		VALUES ('$post_department', '$post_semester', '$post_classId', '$post_credit', '$post_title', '$post_teacher', '$post_link')";
+		mysqli_query($db_link, $sql_insert);
+		$db_link->close();
+
+		$message="課程新增成功";
+		echo "<script>alert('$message');</script>";
+
+	}else{
+		$message="此課程已經新增過摟";
+		echo "<script>alert('$message'); </script>";
+
+	}
+	echo "<script>location.href='class_edit.php';</script>";
+
+	$db_link->close();
+}
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
@@ -42,7 +81,7 @@ if (isset($_GET["id"])) {
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/nav.css">
-	<title>更新課程資料</title>
+	<title>新增課程</title>
 </head>
 
 <body>
@@ -80,17 +119,11 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">系所</label>
 							</div>
-							<select name="department" class="custom-select">
-								<option value="<? echo $department; ?>"><? echo $department; ?></option>
-								<? if ($department != "資傳系") { ?>
-									<option value="資傳系">資傳系</option>
-								<? } ?>
-								<? if ($department != "資工系") { ?>
-									<option value="資工系">資工系</option>
-								<? } ?>
-								<? if ($department != "資訊英專") { ?>
-									<option value="資訊英專">資訊英專</option>
-								<? } ?>
+							<select name="department" class="custom-select" required>
+								<option value="" selected disabled hidden></option>
+								<option value="資傳系">資傳系</option>
+								<option value="資工系">資工系</option>
+								<option value="資訊英專">資訊英專</option>
 							</select>
 						</div>
 					</div>
@@ -102,23 +135,13 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">學期</label>
 							</div>
-							<select name="semester" class="custom-select">
-								<option value="<? echo $semester; ?>"><? echo $semester; ?></option>
-								<? if ($semester != "1071") { ?>
-									<option value="1071">1071</option>
-								<? } ?>
-								<? if ($semester != "1072") { ?>
-									<option value="1072">1072</option>
-								<? } ?>
-								<? if ($semester != "1081") { ?>
-									<option value="1081">1081</option>
-								<? } ?>
-								<? if ($semester != "1082") { ?>
-									<option value="1082">1082</option>
-								<? } ?>
-								<? if ($semester != "1091") { ?>
-									<option value="1091">1091</option>
-								<? } ?>
+							<select name="semester" class="custom-select" required>
+								<option value="" selected disabled hidden></option>
+								<option value="1071">1071</option>
+								<option value="1072">1072</option>
+								<option value="1081">1081</option>
+								<option value="1082">1082</option>
+								<option value="1091">1091</option>
 							</select>
 						</div>
 					</div>
@@ -130,7 +153,7 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">課號</span>
 							</div>
-							<input type="text" class="form-control" aria-label="classId" aria-describedby="basic-addon1" name="classId" id="classId" value="<? echo $classId ?>">
+							<input type="text" class="form-control" aria-label="classId" aria-describedby="basic-addon1" name="classId" id="classId" required>
 						</div>
 					</div>
 				</div>
@@ -141,7 +164,7 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">學分</span>
 							</div>
-							<input type="text" class="form-control" aria-label="credit" aria-describedby="basic-addon1" name="credit" id="credit" value="<? echo $credit ?>">
+							<input type="text" class="form-control" aria-label="credit" aria-describedby="basic-addon1" name="credit" id="credit" required>
 						</div>
 					</div>
 				</div>
@@ -152,7 +175,7 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">課程名稱</span>
 							</div>
-							<input type="text" class="form-control" aria-label="title" aria-describedby="basic-addon1" name="title" id="title" value="<? echo $title ?>">
+							<input type="text" class="form-control" aria-label="title" aria-describedby="basic-addon1" name="title" id="title" required>
 						</div>
 					</div>
 				</div>
@@ -163,7 +186,7 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">導師名稱</span>
 							</div>
-							<input type="text" class="form-control" aria-label="teacher" aria-describedby="basic-addon1" name="teacher" id="teacher" value="<? echo $teacher ?>">
+							<input type="text" class="form-control" aria-label="teacher" aria-describedby="basic-addon1" name="teacher" id="teacher" required>
 						</div>
 					</div>
 				</div>
@@ -174,7 +197,7 @@ if (isset($_GET["id"])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">課程簡介連結</span>
 							</div>
-							<input type="text" class="form-control" aria-label="link" aria-describedby="basic-addon1" name="link" id="link" value="<? echo $link ?>">
+							<input type="text" class="form-control" aria-label="link" aria-describedby="basic-addon1" name="link" id="link" required>
 						</div>
 					</div>
 				</div>
@@ -183,9 +206,7 @@ if (isset($_GET["id"])) {
 					<div class="col-8">
 						<div class="form-group row">
 							<div class="col-sm text-center">
-								<input type="hidden" name="id" value="<?php echo $id; ?>">
-								<input name="action" type="hidden" id="action" value="update">
-								<input class="btn btn-dark" type="submit" name="submit_info" value="確認修改">
+								<input class="btn btn-dark btn-sm" type="submit" name="submit_info" id="submit_info" value="新增課程">
 								<input class="btn btn-dark" type="reset" name="button2" value="重設資料">
 								<input class="btn btn-dark" type="button" name="button3" value="回上一頁" onClick="window.history.back();">
 							</div>

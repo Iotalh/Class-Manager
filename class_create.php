@@ -169,7 +169,7 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">導師名稱</span>
+								<span class="input-group-text" id="basic-addon1">教師名稱</span>
 							</div>
 							<input type="text" class="form-control" aria-label="teacher" aria-describedby="basic-addon1" name="teacher" id="teacher" required>
 						</div>

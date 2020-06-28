@@ -3,7 +3,7 @@ header("Content-Type: text/html; charset=utf-8");
 require_once("connectMysql.php");
 if (isset($_GET["classId"])) {
     $classId = $_GET["classId"];
-    $sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment ORDER BY createTime ASC";
+    $sql_select = "SELECT id, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE class={$classId} ORDER BY createTime ASC";
     $comments = $db_link->query($sql_select);
 
     session_start();
@@ -43,7 +43,7 @@ if (isset($_GET["classId"])) {
 
                     </ul>
                     <div class="row nav-item justify-content-end">
-                        <a class="nav-link nav-btn" href="comment_add.php?classId=<? echo $classId; ?>">新增留言</a>
+                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增留言</a>
                         <a class="nav-link nav-btn" href="logout.php">登出</a>
                     </div>
                 </div>
@@ -55,7 +55,7 @@ if (isset($_GET["classId"])) {
             ?>
                 <div class="row">
                     <div class="col-sm">
-                        <div class="card boder-primary mb-3">
+                        <div class="card boder-light mb-3">
                             <div class="card-header d-flex">
                                 <div class="mr-auto">
                                     <span class="badge badge-pill badge-secondary"><? echo $row["id"] ?></span>
@@ -101,18 +101,20 @@ if (isset($_GET["classId"])) {
                                     }
 
                                     if (isset($userName)) {
-                                        echo "<span class='badge badge-light'>" . $userName . "</span>";
+                                        if ($userName == $_SESSION["userName"] || $_SESSION["userRole"] == "admin") {
+                                            echo "<span class='badge badge-light'>" . $userName . "</span>";
+                                        }
                                     } else {
-                                        echo "<span class='badge badge-light'>匿名ㄉ朋友</span>";
+                                        echo "<span class='badge badge-light'>某個也有修課的同學</span>";
                                     }
                                     ?>
                                 </div>
                                 <div>
                                     <?
                                     if (isset($_SESSION["id"]) && isset($row["student"])) {
-                                        if ($row["student"] == $_SESSION["id"]) {
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
+                                        if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
+                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
+                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_delete.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
                                         }
                                     }
                                     ?>

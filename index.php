@@ -37,25 +37,18 @@ $db_link->close();
 						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
-				<div class="row nav-item justify-content-end">
-					<!-- <a class="col nav-link nav-btn" href="#" hiddden><? // echo $_SESSION["userName"]
-																			?></a> -->
-					<?
-					if ($_SESSION["userName"] == NULL) { ?>
-						<a class="col nav-link nav-btn" href="login.php">登入</a>
-						<a class="col nav-link nav-btn" href="signup.php">註冊</a>
-						<? } else {
-						if ($_SESSION["userRole"] == "student") { ?>
-							<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-							<a class="col nav-link nav-btn" href="logout.php">登出</a>
-						<? } else { ?>
-							<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-							<a class="col nav-link nav-btn" href="class_edit.php">編輯</a>
-							<a class="col nav-link nav-btn" href="logout.php">登出</a>
-
-						<? } ?>
+				<?
+				if ($_SESSION["userName"] == NULL) { ?>
+					<a class="btn btn-dark float-right" href="login.php">登入</a>
+					<a class="btn btn-dark float-right" href="signup.php">註冊</a>
+				<? } else { ?>
+					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
+					<? if ($_SESSION["userRole"] != "student") { ?>
+						<a class="btn btn-dark float-right" href="class_edit.php">編輯</a>
 					<? } ?>
-				</div>
+					<a class="btn btn-dark float-right" href="logout.php">登出</a>
+
+				<? } ?>
 			</div>
 		</nav>
 		<div class="container">
@@ -78,7 +71,7 @@ $db_link->close();
 							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="comment_list.php?classId=<?php echo $row_RecClass["id"]?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
+							<td><a class="btn btn-dark btn-sm" href="comment_read.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
 							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
 						</tr>

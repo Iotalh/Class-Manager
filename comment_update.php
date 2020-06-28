@@ -33,31 +33,42 @@ function getSQLValue($value, $type)
 }
 session_start();
 
-if (!isset($_SESSION["id"])) { // isset($_GET["class"]) &&
+if (!isset($_SESSION['id'])) { // isset($_GET["class"]) &&
 	echo "<script>alert('請先登入'); location.href = 'login.php';</script>";
 }
-if (isset($_GET["classId"])) {
+
+if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 	include("connectMysql.php");
+	$id = $_GET["commentId"];
 	$classId = $_GET["classId"];
-	$student = $_SESSION["id"];
 	$sql_class_select = "SELECT title FROM class WHERE id=?";
 	$class_stmt = $db_link->prepare($sql_class_select);
 	$class_stmt->bind_param("i", $classId);
 	if ($class_stmt->execute()) {
 		$class_stmt->bind_result($classTitle);
 		$class_stmt->fetch();
+		$class_stmt->close();
 	}
-	if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
-		$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
-		$stmt = $db_link->prepare($sql_insert);
-		$stmt->bind_param("iisiii", $classId, $student, getSQLValue($_POST["content"], "string"), $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
+
+	$sql_select = "SELECT class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE id=?";
+	$stmt = $db_link->prepare($sql_select);
+	$stmt->bind_param("i", $id);
+	if ($stmt->execute()) {
+		$stmt->bind_result($class, $student, $createTime, $updateTime, $content, $sweetScore, $hwScore, $learnScore);
+		$stmt->fetch();
+		$stmt->close();
+	}
+	if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
+		$sql_update = "UPDATE comment SET updateTime=now(), content=?,sweetScore=?, hwScore=?, learnScore=? WHERE id=?";
+		$stmt = $db_link->prepare($sql_update);
+		$stmt->bind_param("ssssi", $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"], $_POST["id"]);
 		if ($stmt->execute()) {
 			$stmt->close();
 			$db_link->close();
 			// echo "新增成功";
-			echo "<script>alert('新增成功'); location.href='index.php';</script>";
+			echo "<script>alert('修改成功'); location.href='comment_read.php?classId=".$classId."';</script>";
 		} else {
-			echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+			echo "<script>alert('修改失敗');</script>";
 			echo $stmt->error;
 			die();
 		}
@@ -165,20 +176,17 @@ if (isset($_GET["classId"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容">
-						<?php
-						if (isset($content)) {
-							echo $content;
-						}
-						?>
-					</textarea>
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容"><?php
+					echo $content;
+					?></textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
-				<input type="hidden" name="action" id="action" value="add">
-				<input type="submit" value="送出留言" class="btn btn-dark post-btns" name="button" id="button">
-				<input type="reset" value="重設資料" class="btn btn-dark post-btns" name="button2" id="button2">
-				<input type="button" value="回上一頁" class="btn btn-dark post-btns" name="button3" id="button3" onclick="window.history.back();">
+				<input type="hidden" name="id" value="<?php echo $id; ?>">
+				<input type="hidden" name="action" id="action" value="update">
+				<input type="submit" value="送出留言" class="btn btn-dark post-btns" name="btmSMT">
+				<input type="reset" value="重設資料" class="btn btn-dark post-btns" name="btnRST">
+				<input type="button" value="回上一頁" class="btn btn-dark post-btns" name="btnBACK" onclick="window.history.back();">
 			</div>
 
 		</form>
@@ -229,6 +237,3 @@ if (isset($_GET["classId"])) {
 		}
 	});
 </script>
-<?
-$class_stmt->close();
-?>

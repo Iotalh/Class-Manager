@@ -123,7 +123,7 @@ if (isset($_POST['submit_info'])) {
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<label class="input-group-text" for="inputGroupSelect01">Role</label>
+								<label class="input-group-text" for="inputGroupSelect01">身分</label>
 							</div>
 							<select  name ="role" class="custom-select" required>
 								<option value="" selected disabled hidden></option>
@@ -138,7 +138,7 @@ if (isset($_POST['submit_info'])) {
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<label class="input-group-text" for="inputGroupSelect01">Department</label>
+								<label class="input-group-text" for="inputGroupSelect01">註冊</label>
 							</div>
 							<select name ="department" class="custom-select" required>
 								<option value="" selected disabled hidden></option>

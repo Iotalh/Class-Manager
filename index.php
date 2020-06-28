@@ -61,7 +61,7 @@ $result = $db_link->query($sql_query);
 			<table class="table table-dark">
 				<thead>
 					<tr>
-						<th scope="col">#</th>
+						<th scope="col">課號</th>
 						<th scope="col">系所</th>
 						<th scope="col">學期</th>
 						<th scope="col">學分</th>
@@ -73,7 +73,7 @@ $result = $db_link->query($sql_query);
 				<tbody>
 					<? while ($row_RecClass = $result->fetch_assoc()) { ?>
 						<tr>
-							<th scope="row"><? echo nl2br($row_RecClass["id"]); ?> </th>
+							<th scope="row"><? echo nl2br($row_RecClass["classId"]); ?> </th>
 							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>

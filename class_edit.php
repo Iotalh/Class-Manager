@@ -40,18 +40,24 @@ $db_link->close();
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
+					<li class="nav-item active">
+						<? if ($_SESSION["userRole"] != "student") { ?>
+							<a class="col nav-link nav-btn" href="class_create.php">新增課程</a>
+						<? } ?>
+					</li>
 				</ul>
-				<? if ($_SESSION["userRole"] != "student") { ?>
-					<a class="btn btn-dark float-right" href="class_create.php">新增課程</a>
-				<? } ?>
-				<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-				<a class="btn btn-dark float-right" href="logout.php">登出</a>
+				<div class="row nav-item">
+
+					<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
+
+					<a class="col nav-link nav-btn" href="logout.php">登出</a>
+
+				</div>
 			</div>
 		</nav>
 		<div class="container">

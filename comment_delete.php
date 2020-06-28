@@ -56,7 +56,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
 	<link rel="stylesheet" href="css/comment.css">
 	<link rel="stylesheet" href="css/nav.css">
-	<title>編輯留言</title>
+	<title>編輯評價</title>
 </head>
 
 <body>
@@ -82,11 +82,11 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 	</header>
 
 	<div class="container-fluid post text-white bg-dark">
-		<h1 class="text-center">留言</h1>
+		<h1 class="text-center">評價</h1>
 		<form action="" method="post" name="formPost" onsubmit="return checkForm();">
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<input type="text" name="title" id="title" class="form-control" placeholder="留言課程名稱" value="<? echo $classTitle; ?>" readonly>
+					<input type="text" name="title" id="title" class="form-control" placeholder="評價課程名稱" value="<? echo $classTitle; ?>" readonly>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -128,7 +128,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容" readonly><?php
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入評價內容" readonly><?php
 					echo $content;
 					?></textarea>
 				</div>

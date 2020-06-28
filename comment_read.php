@@ -32,7 +32,7 @@ if (isset($_GET["classId"])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
         <link rel="stylesheet" href="css/comment.css">
         <link rel="stylesheet" href="css/nav.css">
-        <title>留言列表</title>
+        <title>評價列表</title>
     </head>
 
     <body>
@@ -51,7 +51,7 @@ if (isset($_GET["classId"])) {
 
                     </ul>
                     <div class="row nav-item justify-content-end">
-                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增留言</a>
+                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增評價</a>
                         <?php if ($_SESSION['id'] != NULL) { ?>
                             <a class="nav-link nav-btn" href="logout.php">登出</a>
                         <?php } else { ?>

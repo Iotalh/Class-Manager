@@ -18,39 +18,32 @@ if ($_SESSION["userRole"] != 'admin') { //測試是不是管理者
 if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 	include("connectMysql.php");
 	
-	$post_department = $_POST["department"];
 	$post_title = $_POST["title"];
+
 	$sql_query = "SELECT * FROM class ORDER BY title ";
 	$result = $db_link->query($sql_query);
 
-	$test = false;
+	$test1 = 1;
 	while($row_result = $result->fetch_assoc())
 	{
 		if($row_result['title'] == $post_title)
 		{
-			$test = true;
-		}
-	}
-	$sql_query_2 = "SELECT * FROM class ORDER BY department";
-	$result_2 = $db_link->query($sql_query);
-
-	while($row_result_2 = $result_2->fetch_assoc())
-	{
-		if($row_result_2['department'] == $post_department)
-		{
-			$test = true;
+			$test1 = 0;
+			echo "test1=false"."<br>";
 		}
 	}
 
-	if($test != true){
+
+	if($test1 != 0){
+		$post_department = $_POST["department"];
 		$post_semester = $_POST["semester"];
 		$post_classId = $_POST["classId"];
 		$post_credit = $_POST["credit"];
 		$post_teacher = $_POST["teacher"];
 		$post_link = $_POST["link"];
 
-		//echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
-		//" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
+		echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
+		" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
 
 		$sql_insert = "INSERT INTO class (department, semester ,classId ,credit ,title, teacher, link) 
 		VALUES ('$post_department', '$post_semester', '$post_classId', '$post_credit', '$post_title', '$post_teacher', '$post_link')";

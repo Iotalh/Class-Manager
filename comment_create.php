@@ -51,20 +51,15 @@ if (isset($_GET["classId"])) {
 	if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
 		$class = $_POST["id"];
-		if ($db_link->prepare($sql_insert)) {
-			echo "true";
-		} else {
-			echo "false";
-		}
 		$stmt = $db_link->prepare($sql_insert);
 		$stmt->bind_param("iissss", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
 		if ($stmt->execute()) {
 			$stmt->close();
 			$db_link->close();
 			// echo "新增成功";
-			echo "<script>alert('新增成功'); location.href='index.php';</script>";
+			echo "<script>alert('新增成功'); location.href='comment_list.php?classId=$class';</script>";
 		} else {
-			echo "<script>alert('新增失敗'); location.href='index.php';</script>";
+			echo "<script>alert('新增失敗'); location.href='comment_list.php?classId=$class';</script>";
 			echo $stmt->error;
 			die();
 		}

@@ -45,19 +45,12 @@ $db_link->close();
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">課程清單 <span class="sr-only">(current)</span></a>
 					</li>
-					<li class="nav-item active">
-						<? if ($_SESSION["userRole"] != "student") { ?>
-							<a class="col nav-link nav-btn" href="class_create.php">新增課程</a>
-						<? } ?>
-					</li>
 				</ul>
-				<div class="row nav-item">
-
-					<a class="col nav-link nav-btn" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
-
-					<a class="col nav-link nav-btn" href="logout.php">登出</a>
-
-				</div>
+				<? if ($_SESSION["userRole"] != "student") { ?>
+					<a class="btn btn-dark float-right" href="class_create.php">新增課程</a>
+				<? } ?>
+					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
+					<a class="btn btn-dark float-right" href="logout.php">登出</a>
 			</div>
 		</nav>
 		<div class="container">

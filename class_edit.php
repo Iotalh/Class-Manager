@@ -72,7 +72,7 @@ if(	$_SESSION["userRole"] != 'admin')
 			<table class="table table-dark">
 				<thead>
 					<tr>
-						<th scope="col">#</th>
+						<th scope="col">課號</th>
 						<th scope="col">系所</th>
 						<th scope="col">學期</th>
 						<th scope="col">學分</th>
@@ -85,7 +85,7 @@ if(	$_SESSION["userRole"] != 'admin')
 				<tbody>
 					<? while ($row_RecClass = $result->fetch_assoc()) { ?>
 						<tr>
-							<th scope="row"><? echo nl2br($row_RecClass["id"]); ?> </th>
+							<th scope="row"><? echo nl2br($row_RecClass["classId"]); ?> </th>
 							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
@@ -93,8 +93,8 @@ if(	$_SESSION["userRole"] != 'admin')
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
 							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
 
-							<td><a class="btn btn-dark btn-sm" href='class_update.php?id="<?echo$row_RecClass["id"]?>"'>修改</a>
-								<a class="btn btn-dark btn-sm" href='class_delete.php?id="<?echo$row_RecClass["id"]?>"'>刪除</a></td>
+							<td><a class="btn btn-dark btn-sm" href='class_update.php?id=<?echo$row_RecClass["id"]?>'>修改</a>
+								<a class="btn btn-dark btn-sm" href='class_delete.php?id=<?echo$row_RecClass["id"]?>'>刪除</a></td>
 						</tr>
 
 

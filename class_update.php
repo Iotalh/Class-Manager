@@ -1,24 +1,47 @@
 <?
 include("connectMysql.php");
-if(isset($_POST['submit_info'])){
-	$sql_query= "UPDATE class SET department=?, semester=?, classId=?, credit=?, title=?, teacher=?, link=? where id = $id";
-	$stmt = $db_link->prepare($sql_query);
-	$stmt->bind_param('ssiisssi', $_POST['department'], $_POST['semester'], $_POST['classId'], $_POST['credit'], $_POST['title'], $_POST['teacher'], $_POST['link'], $_POST['id']);
-	$stmt->execute();
-    $stmt->close();
-	$db_link->close();
+	if(isset($_POST['submit_info'])){
+		$id = $_POST['id'];
+		$department = $_POST['department'];
+		$semester = $_POST['semester'];
+		$classId = $_POST['classId'];
+		$credit = $_POST['credit'];
+		$title = $_POST['title'];
+		$teacher = $_POST['teacher'];
+		$link = $_POST['link'];
+		echo "id= ".$id." department= ". $department. " semester= ".$semester. " classId=".$classId. 
+		" credit= ".$credit. " title= ".$title. "teacher= ".$teacher. " link= ".$link."<br>";
 
-	$message = "課程資料更新成功!";
-	echo "<script>alert('$message'); </script>";
-	//echo "<script>location.href='class_edit.php';</script>";
-}
+		$sql_query= "UPDATE class SET department = '$department', semester = '$semester', classId = $classId, credit = $credit, 
+		title = '$title', teacher = '$teacher', link = '$link' where id = $id";
 
-$sql_select = "SELECT department, semester, classId, credit, title, teacher, link FROM class WHERE id=?";
-$stmt = $db_link->prepare($sql_select);
-$stmt->bind_param("i", $_GET["id"]);
-$stmt->execute();
-$stmt->bind_result($id, $department, $semester, $classId, $credit, $title, $teacher, $link);
-$stmt->fetch();
+		mysqli_query($db_link, $sql_query);
+		
+		$db_link->close();
+
+		$message = "課程資料更新成功!";
+		echo "<script>alert('$message'); </script>";
+		echo "<script>location.href='class_edit.php';</script>";
+	}else{
+	$get_userid= $_GET["id"];
+	$sql_select = "SELECT * FROM class WHERE id = $get_userid";
+	$result = mysqli_query($db_link, $sql_select);
+	$row_result = mysqli_fetch_assoc($result);
+
+	$id = $row_result['id'];
+	$department = $row_result['department'];
+	$semester = $row_result['semester'];
+	$classId = $row_result['classId'];
+	$credit = $row_result['credit'];
+	$title = $row_result['title'];
+	$teacher = $row_result['teacher'];
+
+	//echo "id= ".$id." department= ". $department. " semester= ".$semester. " classId=".$classId. 
+	//" credit= ".$credit. " title= ".$title. "teacher= ".$teacher. " link= ".$link."<br>";
+	
+	$link = $row_result['link'];
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -72,10 +95,16 @@ $stmt->fetch();
 								<label class="input-group-text" for="inputGroupSelect01">系所</label>
 							</div>
 							<select  name ="department" class="custom-select" >
-							　	<option value="" selected disabled hidden><?php echo $department; ?></option>
-								<option value="資傳系">資傳系</option>
-								<option value="資工系">資工系</option>
-								<option value="資訊英專">資訊英專</option>
+							<option value="<? echo $department; ?>" ><? echo $department; ?></option>
+								<?if($department != "資傳系"){?>
+									<option value="資傳系">資傳系</option>
+								<?}?>
+								<?if($department != "資工系"){?>
+									<option value="資工系">資工系</option>
+								<?}?>
+								<?if($department != "資訊英專"){?>
+									<option value="資訊英專">資訊英專</option>
+								<?}?>
 							</select>
 						</div>
 					</div>
@@ -88,12 +117,22 @@ $stmt->fetch();
 								<label class="input-group-text" for="inputGroupSelect01">學期</label>
 							</div>
 							<select name ="semester" class="custom-select" >
-							　	<option value="" selected disabled hidden><?php echo $semester; ?></option>
-								<option value="1071">1071</option>
-								<option value="1072">1072</option>
-								<option value="1081">1081</option>
-								<option value="1082">1082</option>
-								<option value="1091">1091</option>
+							<option value="<? echo $semester; ?>" ><? echo $semester; ?></option>
+								<?if($semester != "1071"){?>
+									<option value="1071">1071</option>
+								<?}?>
+								<?if($semester != "1072"){?>
+									<option value="1072">1072</option>
+								<?}?>
+								<?if($semester != "1081"){?>
+									<option value="1081">1081</option>
+								<?}?>
+								<?if($semester != "1082"){?>
+									<option value="1082">1082</option>
+								<?}?>
+								<?if($semester != "1091"){?>
+									<option value="1091">1091</option>
+								<?}?>
 							</select>
 						</div>
 					</div>
@@ -114,7 +153,7 @@ $stmt->fetch();
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">時數</span>
+								<span class="input-group-text" id="basic-addon1">學分</span>
 							</div>
 							<input type="text" class="form-control" aria-label="credit" aria-describedby="basic-addon1" name="credit" id="credit" value = "<?echo $credit?>">
 						</div>
@@ -159,10 +198,10 @@ $stmt->fetch();
 						<div class="form-group row">
 							<div class="col-sm text-center">
 								<input type="hidden" name="id" value="<?php echo $id; ?>">
-								<input name="action" type="hidden" value="update">
-								<input class="btn btn-dark" type="submit" name="submit_info" value="確認修改">
-								<input class="btn btn-dark" type="reset" name="btnRST" value="重設資料">
-								<input class="btn btn-dark" type="button" name="btnBACK" value="回上一頁" onClick="window.history.back();">
+								<input name="action" type="hidden" id="action" value="add">
+								<input class="btn btn-dark" type="submit" name="submit_info" id="submit_info" value="確認修改">
+								<input class="btn btn-dark" type="reset" name="button2" id="button2" value="重設資料">
+								<input class="btn btn-dark" type="button" name="button3" id="button3" value="回上一頁" onClick="window.history.back();">
 							</div>
 						</div>
 					</div>
@@ -171,6 +210,3 @@ $stmt->fetch();
 		</div>
 	</div>
 </body>
-</html>
-
-<?$stmt->close();?>

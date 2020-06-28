@@ -38,19 +38,26 @@ if (!isset($_SESSION["id"])) { // isset($_GET["class"]) &&
 }
 if (isset($_GET["classId"])) {
 	include("connectMysql.php");
-	$classId = $_GET["classId"];
+	$id = $_GET["classId"];
 	$student = $_SESSION["id"];
 	$sql_class_select = "SELECT title FROM class WHERE id=?";
 	$class_stmt = $db_link->prepare($sql_class_select);
-	$class_stmt->bind_param("i", $classId);
+	$class_stmt->bind_param("i", $id);
 	if ($class_stmt->execute()) {
 		$class_stmt->bind_result($classTitle);
 		$class_stmt->fetch();
+		$class_stmt->close();
 	}
 	if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		$sql_insert = "INSERT INTO comment(class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore) VALUES (?, ?, now(), now(), ?, ?, ?, ?)";
+		$class = $_POST["id"];
+		if ($db_link->prepare($sql_insert)) {
+			echo "true";
+		} else {
+			echo "false";
+		}
 		$stmt = $db_link->prepare($sql_insert);
-		$stmt->bind_param("iisiii", $classId, $student, getSQLValue($_POST["content"], "string"), $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
+		$stmt->bind_param("iissss", $class, $student, $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"]);
 		if ($stmt->execute()) {
 			$stmt->close();
 			$db_link->close();
@@ -165,16 +172,15 @@ if (isset($_GET["classId"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容">
-						<?php
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容"><?php
 						if (isset($content)) {
 							echo $content;
 						}
-						?>
-					</textarea>
+						?></textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
+				<input type="hidden" name="id" value="<?php echo $id; ?>">
 				<input type="hidden" name="action" id="action" value="add">
 				<input type="submit" value="送出留言" class="btn btn-dark post-btns" name="button" id="button">
 				<input type="reset" value="重設資料" class="btn btn-dark post-btns" name="button2" id="button2">
@@ -229,6 +235,3 @@ if (isset($_GET["classId"])) {
 		}
 	});
 </script>
-<?
-$class_stmt->close();
-?>

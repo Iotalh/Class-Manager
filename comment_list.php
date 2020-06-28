@@ -3,7 +3,7 @@ header("Content-Type: text/html; charset=utf-8");
 require_once("connectMysql.php");
 if (isset($_GET["classId"])) {
     $classId = $_GET["classId"];
-    $sql_select = "SELECT id, class, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment ORDER BY createTime ASC";
+    $sql_select = "SELECT id, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE class={$classId} ORDER BY createTime ASC";
     $comments = $db_link->query($sql_select);
 
     session_start();
@@ -55,7 +55,7 @@ if (isset($_GET["classId"])) {
             ?>
                 <div class="row">
                     <div class="col-sm">
-                        <div class="card boder-primary mb-3">
+                        <div class="card boder-light mb-3">
                             <div class="card-header d-flex">
                                 <div class="mr-auto">
                                     <span class="badge badge-pill badge-secondary"><? echo $row["id"] ?></span>
@@ -110,7 +110,7 @@ if (isset($_GET["classId"])) {
                                 <div>
                                     <?
                                     if (isset($_SESSION["id"]) && isset($row["student"])) {
-                                        if ($row["student"] == $_SESSION["id"]) {
+                                        if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
                                             echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
                                             echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
                                         }

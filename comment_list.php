@@ -114,7 +114,7 @@ if (isset($_GET["classId"])) {
                                     if (isset($_SESSION["id"]) && isset($row["student"])) {
                                         if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
                                             echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
+                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_delete.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
                                         }
                                     }
                                     ?>

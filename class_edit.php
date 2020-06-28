@@ -93,8 +93,8 @@ if(	$_SESSION["userRole"] != 'admin')
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
 							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
 
-							<td><a class="btn btn-dark btn-sm" href='class_update.php?id="<?echo$row_RecClass["id"]?>"'>修改</a>
-								<a class="btn btn-dark btn-sm" href='class_delete.php?id="<?echo$row_RecClass["id"]?>"'>刪除</a></td>
+							<td><a class="btn btn-dark btn-sm" href='class_update.php?id=<?echo$row_RecClass["id"]?>'>修改</a>
+								<a class="btn btn-dark btn-sm" href='class_delete.php?id=<?echo$row_RecClass["id"]?>'>刪除</a></td>
 						</tr>
 
 

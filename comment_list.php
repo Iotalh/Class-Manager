@@ -43,7 +43,7 @@ if (isset($_GET["classId"])) {
 
                     </ul>
                     <div class="row nav-item justify-content-end">
-                        <a class="nav-link nav-btn" href="comment_add.php?classId=<? echo $classId; ?>">新增留言</a>
+                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增留言</a>
                         <a class="nav-link nav-btn" href="logout.php">登出</a>
                     </div>
                 </div>
@@ -111,8 +111,8 @@ if (isset($_GET["classId"])) {
                                     <?
                                     if (isset($_SESSION["id"]) && isset($row["student"])) {
                                         if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_edit.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
+                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
+                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
                                         }
                                     }
                                     ?>

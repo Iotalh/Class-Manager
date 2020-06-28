@@ -3,7 +3,6 @@ if (isset($_POST['submit_info'])) {
 	include("connectMysql.php");
 
 	$post_studentId = $_POST["studentId"];
-	echo "post_studentId= ".$post_studentId."<br>";
 	$sql_query = "SELECT * FROM account ORDER BY id ";
 	$result = $db_link->query($sql_query);
 
@@ -12,7 +11,6 @@ if (isset($_POST['submit_info'])) {
 	{
 		if($row_result['studentId'] == $post_studentId)
 		{
-			echo "ccc";
 			$test = true;
 		}
 	}
@@ -37,7 +35,7 @@ if (isset($_POST['submit_info'])) {
 
 			$message="註冊成功";
 			echo "<script>alert('$message');
-			//location.href='login.php';</script>";
+			location.href='login.php';</script>";
 
 		}
 		else{
@@ -49,8 +47,9 @@ if (isset($_POST['submit_info'])) {
 		echo "<script>alert('$message'); </script>";
 
 	}
+	$db_link->close();
 	
-	//echo "<script>location.href='signup.php';</script>";
+	echo "<script>location.href='signup.php';</script>";
 
 }
 ?>
@@ -104,7 +103,7 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">姓名</span>
 							</div>
-							<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="name" id="name">
+							<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="name" id="name" required>
 						</div>
 					</div>
 				</div>
@@ -116,7 +115,7 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">學號</span>
 							</div>
-							<input type="text" name="studentId" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" id="studentId">
+							<input type="text" name="studentId" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" id="studentId" required>
 						</div>
 					</div>
 				</div>
@@ -126,7 +125,7 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">身分</label>
 							</div>
-							<select  name ="role" class="custom-select" >
+							<select  name ="role" class="custom-select" required>
 								<option value="" selected disabled hidden></option>
 								<option value="admin">Teacher</option>
 								<option value="student">Student</option>
@@ -141,7 +140,7 @@ if (isset($_POST['submit_info'])) {
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="inputGroupSelect01">註冊</label>
 							</div>
-							<select name ="department" class="custom-select" >
+							<select name ="department" class="custom-select" required>
 								<option value="" selected disabled hidden></option>
 								<option value="資傳系">資傳系</option>
 								<option value="資工系">資工系</option>

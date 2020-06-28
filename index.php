@@ -4,6 +4,7 @@ header("Connect-Type: text/html; charset = utf-8");
 include("connectMysql.php");
 $sql_query = "SELECT * FROM class ORDER BY id ASC";
 $result = $db_link->query($sql_query);
+$db_link->close();
 
 ?>
 

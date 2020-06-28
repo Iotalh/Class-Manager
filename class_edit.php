@@ -14,6 +14,7 @@ if ($_SESSION["userRole"] != 'admin') {
 	echo "<script>alert('$message'); 
 	location.href = 'index.php';</script>";
 }
+$db_link->close();
 
 ?>
 
@@ -47,7 +48,7 @@ if ($_SESSION["userRole"] != 'admin') {
 					</li>
 					<li class="nav-item active">
 						<? if ($_SESSION["userRole"] != "student") { ?>
-							<a class="col nav-link nav-btn" href="#">新增課程</a>
+							<a class="col nav-link nav-btn" href="class_create.php">新增課程</a>
 						<? } ?>
 					</li>
 				</ul>

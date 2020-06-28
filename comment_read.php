@@ -32,7 +32,7 @@ if (isset($_GET["classId"])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
         <link rel="stylesheet" href="css/comment.css">
         <link rel="stylesheet" href="css/nav.css">
-        <title>評價列表</title>
+        <title>評論列表</title>
     </head>
 
     <body>
@@ -51,7 +51,7 @@ if (isset($_GET["classId"])) {
 
                     </ul>
                     <div class="row nav-item justify-content-end">
-                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增評價</a>
+                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增評論</a>
                         <?php if ($_SESSION['id'] != NULL) { ?>
                             <a class="nav-link nav-btn" href="logout.php">登出</a>
                         <?php } else { ?>
@@ -64,14 +64,14 @@ if (isset($_GET["classId"])) {
         </header>
         <div class="container info">
             <div class="alert alert-dark" role='alert'>關於
-                <? echo $classTitle; ?> 的評價
+                <? echo $classTitle; ?> 的評論
             </div>
         </div>
         <div class="container comment-list text-white bg-dark">
             <?php if ($total_comments == 0) {
                 echo "<div class='container info'>";
                 echo "<div class='alert alert-warning' role='alert'>";
-                echo "尚無評價，快來當第一個評價的同學吧！";
+                echo "尚無評論，快來當第一個評論的同學吧！";
                 echo "</div></div>";
             } else {
                 while ($row = $comments->fetch_assoc()) {

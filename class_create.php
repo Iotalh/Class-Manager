@@ -29,7 +29,7 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 		if($row_result['title'] == $post_title)
 		{
 			$test1 = 0;
-			echo "test1=false"."<br>";
+			//echo "test1=false"."<br>";
 		}
 	}
 
@@ -42,8 +42,8 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 		$post_teacher = $_POST["teacher"];
 		$post_link = $_POST["link"];
 
-		echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
-		" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
+		//echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
+		//" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
 
 		$sql_insert = "INSERT INTO class (department, semester ,classId ,credit ,title, teacher, link) 
 		VALUES ('$post_department', '$post_semester', '$post_classId', '$post_credit', '$post_title', '$post_teacher', '$post_link')";

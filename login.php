@@ -24,7 +24,7 @@ if (isset($_POST['login_info'])) {
 			$_SESSION["department"] = $row_result['department'];
 
 			$message = "登入成功";
-				echo "<script>alert('$message'); 
+			echo "<script>alert('$message'); 
 				location.href = 'index.php';</script>";
 		} else {
 			$message = "StudentId or password error, please try again.";
@@ -45,9 +45,11 @@ if (isset($_POST['login_info'])) {
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
 	<link rel="stylesheet" href="css/nav.css">
 	<title>登入</title>
 </head>
+
 <body>
 	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -77,19 +79,19 @@ if (isset($_POST['login_info'])) {
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<label for="uname"><b>學號</b></label>
-						<input name="studentID" class="form-control content" type="text" placeholder="Enter studentID"  required>
+						<input name="studentID" class="form-control" type="text" placeholder="Enter studentID" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<label for="psw"><b>Password</b></label>
-						<input name="passwd" class="form-control content" type="password" placeholder="Enter Password" required>
+						<input name="passwd" class="form-control" type="password" placeholder="Enter Password" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
-						<button style="width: 100%;" class="btn btn-dark" type="submit" name="login_info">Login</button>
-						<input style="width: 100%;" type="button" class= "btn btn-dark" value="SignUp" onclick="location.href='signup.php'"></input>
+						<button style="width: 100%;" class="btn btn-dark" type="submit" id="login" name="login_info">Login</button>
+						<input style="width: 100%;" type="button" class="btn btn-dark" value="SignUp" onclick="location.href='signup.php'"></input>
 					</div>
 				</div>
 			</form>
@@ -98,3 +100,18 @@ if (isset($_POST['login_info'])) {
 </body>
 
 </html>
+<script>
+	$(document).ready(function() {
+		var $inputCheck = $(".form-control");
+		var $loginBtn = $("#login");
+		$inputCheck.focusout(function() {
+			if ($(this).val() != "") {
+				$(this).removeClass("is-invalid");
+				$(this).addClass("is-valid");
+			} else {
+				$(this).addClass("is-invalid");
+				$(this).removeClass("is-valid");
+			}
+		});
+	});
+</script>

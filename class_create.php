@@ -54,7 +54,7 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 		$message = "此課程已經新增過摟";
 		echo "<script>alert('$message'); </script>";
 	}
-	echo "<script>location.href='class_read.php';</script>";
+	echo "<script>location.href='classlist_update.php';</script>";
 
 	$db_link->close();
 }

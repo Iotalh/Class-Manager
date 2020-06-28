@@ -42,7 +42,7 @@ $db_link->close();
 				<? } else { ?>
 					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
 					<? if ($_SESSION["userRole"] != "student") { ?>
-						<a class="btn btn-dark float-right" href="class_read.php">編輯</a>
+						<a class="btn btn-dark float-right" href="classlist_update.php">編輯</a>
 					<? } ?>
 					<a class="btn btn-dark float-right" href="logout.php">登出</a>
 				<? } ?>

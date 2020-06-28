@@ -8,5 +8,5 @@
 
 	$message = "刪除成功~";
 	echo "<script>alert('$message'); 
-	location.href = 'class_edit.php';</script>";
+	location.href = 'class_read.php';</script>";
 ?>

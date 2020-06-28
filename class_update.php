@@ -18,11 +18,11 @@ if (isset($_GET["id"])) {
 			$stmt->close();
 			$db_link->close();
 			$message = "課程資料更新成功!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
-			//echo "<script>location.href='class_edit.php';</script>";
+			echo "<script>alert('$message'); location.href='class_read.php';</script>";
+			//echo "<script>location.href='class_read.php';</script>";
 		} else {
 			$message = "課程資料更新失敗!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
+			echo "<script>alert('$message'); location.href='class_read.php';</script>";
 		}
 	}
 }

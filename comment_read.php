@@ -7,13 +7,13 @@ if (isset($_GET["classId"])) {
     $comments = $db_link->query($sql_select);
     $total_comments = $comments->num_rows;
     $sql_class_select = "SELECT title FROM class WHERE id=?";
-	$class_stmt = $db_link->prepare($sql_class_select);
-	$class_stmt->bind_param("i", $classId);
-	if ($class_stmt->execute()) {
-		$class_stmt->bind_result($classTitle);
-		$class_stmt->fetch();
-		$class_stmt->close();
-	}
+    $class_stmt = $db_link->prepare($sql_class_select);
+    $class_stmt->bind_param("i", $classId);
+    if ($class_stmt->execute()) {
+        $class_stmt->bind_result($classTitle);
+        $class_stmt->fetch();
+        $class_stmt->close();
+    }
     session_start();
 
 
@@ -63,7 +63,7 @@ if (isset($_GET["classId"])) {
             </nav>
         </header>
         <div class="container info">
-            <div class="alert alert-dark" role='alert'>關於 
+            <div class="alert alert-dark" role='alert'>關於
                 <? echo $classTitle; ?> 的評價
             </div>
         </div>
@@ -95,11 +95,11 @@ if (isset($_GET["classId"])) {
                                         if (isset($row["hwScore"])) {
                                             $hwScore = $row["hwScore"];
                                             if ($hwScore <= 10 && $hwScore > 6) {
-                                                echo "<span class='badge badge-pill badge-success hwScore'>課業壓力：$hwScore</span>";
+                                                echo "<span class='badge badge-pill badge-danger hwScore'>課業壓力：$hwScore</span>";
                                             } else if ($hwScore <= 6 && $hwScore > 3) {
                                                 echo "<span class='badge badge-pill badge-warning hwScore'>課業壓力：$hwScore</span>";
                                             } else {
-                                                echo "<span class='badge badge-pill badge-danger hwScore'>課業壓力：$hwScore</span>";
+                                                echo "<span class='badge badge-pill badge-success hwScore'>課業壓力：$hwScore</span>";
                                             }
                                         }
                                         if (isset($row["learnScore"])) {
@@ -151,9 +151,9 @@ if (isset($_GET["classId"])) {
                                 <div class="card-footer text-muted">
                                     <div class="d-flex flex-row-reverse">
                                         <span class="justify-content-end badge badge-pill badge-light">
-                                            <? echo $row["createTime"] ?></span>
+                                            建立時間：<? echo $row["createTime"] ?></span>
                                         <span class="justify-content-end badge badge-pill badge-light">
-                                            <? echo $row["updateTime"] ?></span>
+                                            更新時間：<? echo $row["updateTime"] ?></span>
                                     </div>
                                 </div>
                             </div>

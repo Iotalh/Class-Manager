@@ -57,9 +57,9 @@ if (isset($_GET["classId"])) {
 			$stmt->close();
 			$db_link->close();
 			// echo "新增成功";
-			echo "<script>alert('新增成功'); location.href='comment_list.php?classId=$class';</script>";
+			echo "<script>alert('新增成功'); location.href='comment_read.php?classId=$class';</script>";
 		} else {
-			echo "<script>alert('新增失敗'); location.href='comment_list.php?classId=$class';</script>";
+			echo "<script>alert('新增失敗'); location.href='comment_read.php?classId=$class';</script>";
 			echo $stmt->error;
 			die();
 		}

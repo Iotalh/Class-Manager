@@ -49,7 +49,6 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 		$post_teacher = $_POST["teacher"];
 		$post_link = $_POST["link"];
 
-
 		//echo "status: department= ".$post_department." semester= ".$post_semester." classId= ". $post_classId.
 		//" credit= ".$post_credit." title= ".$post_title." teacher= ".$post_teacher." link= ". $post_link."<br>";
 

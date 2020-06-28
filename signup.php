@@ -7,15 +7,13 @@ if (isset($_POST['submit_info'])) {
 	$result = $db_link->query($sql_query);
 
 	$test = false;
-	while($row_result = $result->fetch_assoc())
-	{
-		if($row_result['studentId'] == $post_studentId)
-		{
+	while ($row_result = $result->fetch_assoc()) {
+		if ($row_result['studentId'] == $post_studentId) {
 			$test = true;
 		}
 	}
 
-	if($test != true){
+	if ($test != true) {
 
 		if (isset($_POST["passwd"]) && isset($_POST["passwd_check"]) && ($_POST["passwd"] == $_POST["passwd_check"])) {
 
@@ -28,29 +26,25 @@ if (isset($_POST['submit_info'])) {
 			//echo "status: id= ".$id_num." role= ".$post_role." studentID= ". $post_studentId." hash= ".$cal_hashValue." name= ".$post_name.
 			//" department= ".$post_department."<br>";
 
-		    $sql_insert = "INSERT INTO account (userRole, studentId ,hashValue ,userName ,department) VALUES ('$post_role', '$post_studentId',
+			$sql_insert = "INSERT INTO account (userRole, studentId ,hashValue ,userName ,department) VALUES ('$post_role', '$post_studentId',
 			 '$cal_hashValue', '$post_name', '$post_department')";
 			mysqli_query($db_link, $sql_insert);
 			$db_link->close();
 
-			$message="註冊成功";
+			$message = "註冊成功";
 			echo "<script>alert('$message');
 			location.href='login.php';</script>";
-
-		}
-		else{
-			$message="輸入的兩次密碼不符，請重新輸入";
+		} else {
+			$message = "輸入的兩次密碼不符，請重新輸入";
 			echo "<script>alert('$message'); </script>";
 		}
-	}else{
-		$message="此學號已經註冊過摟";
+	} else {
+		$message = "此學號已經註冊過摟";
 		echo "<script>alert('$message'); </script>";
-
 	}
 	$db_link->close();
-	
-	echo "<script>location.href='signup.php';</script>";
 
+	echo "<script>location.href='signup.php';</script>";
 }
 ?>
 
@@ -82,9 +76,6 @@ if (isset($_POST['submit_info'])) {
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 					</li>
-
-				</ul>
-
 				</ul>
 			</div>
 		</nav>
@@ -98,75 +89,51 @@ if (isset($_POST['submit_info'])) {
 			</div>
 			<form method="POST" name="formPost" action="" onSubmit="return checkForm();">
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">姓名</span>
-							</div>
-							<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="name" id="name" required>
-						</div>
+					<div class="col-4">
+						<span id="basic-addon1">姓名</span>
+						<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="name" id="name" required>
 					</div>
 				</div>
 
 
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">學號</span>
-							</div>
-							<input type="text" name="studentId" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" id="studentId" required>
-						</div>
+					<div class="col-4">
+						<span id="basic-addon1">學號</span>
+						<input type="text" name="studentId" class="form-control" aria-label="studentId" aria-describedby="basic-addon1" id="studentId" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<label class="input-group-text" for="inputGroupSelect01">身分</label>
-							</div>
-							<select  name ="role" class="custom-select" required>
-								<option value="" selected disabled hidden></option>
-								<option value="admin">Teacher</option>
-								<option value="student">Student</option>
-							</select>
-						</div>
+					<div class="col-4">
+						<label for="inputGroupSelect01">身分</label>
+						<select name="role" class="custom-select" required>
+							<option value="" selected disabled hidden></option>
+							<option value="admin">老師</option>
+							<option value="student">學生</option>
+						</select>
 					</div>
 				</div>
 
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<label class="input-group-text" for="inputGroupSelect01">註冊</label>
-							</div>
-							<select name ="department" class="custom-select" required>
-								<option value="" selected disabled hidden></option>
-								<option value="資傳系">資傳系</option>
-								<option value="資工系">資工系</option>
-								<option value="資訊英專">資訊英專</option>
-							</select>
-						</div>
+					<div class="col-4">
+						<label for="inputGroupSelect01">系所</label>
+						<select name="department" class="custom-select" required>
+							<option value="" selected disabled hidden></option>
+							<option value="資傳系">資傳系</option>
+							<option value="資工系">資工系</option>
+							<option value="資訊英專">資訊英專</option>
+						</select>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">密碼</span>
-							</div>
-							<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd" required>
-						</div>
+					<div class="col-4">
+						<span id="basic-addon1">密碼</span>
+						<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
-					<div class="col-8">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">再次確認</span>
-							</div>
-							<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd_check" required>
-						</div>
+					<div class="col-4">
+						<span id="basic-addon1">再次確認</span>
+						<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd_check" required>
 					</div>
 				</div>
 

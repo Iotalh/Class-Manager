@@ -81,7 +81,7 @@ if ($_SESSION["userRole"] != 'admin') {
 							<td><? echo nl2br($row_RecClass["department"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["semester"]); ?> </td>
 							<td><? echo nl2br($row_RecClass["credit"]); ?> </td>
-							<td><a class="btn btn-dark btn-sm" href="comment_list.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
+							<td><a class="btn btn-dark btn-sm" href="comment_read.php?classId=<?php echo $row_RecClass["id"] ?>"><? echo nl2br($row_RecClass["title"]); ?></a></td>
 							<td><? echo nl2br($row_RecClass["teacher"]); ?> </td>
 							<td><a class="btn btn-dark btn-sm" href="<? echo $row_RecClass["link"] ?>">課程頁面</a></td>
 

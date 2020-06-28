@@ -33,7 +33,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 		if ($stmt->execute()) {
 			$stmt->close();
 			$db_link->close();
-			echo "<script>alert('刪除成功'); location.href='comment_list.php?classId=".$classId."';</script>";
+			echo "<script>alert('刪除成功'); location.href='comment_read.php?classId=".$classId."';</script>";
 		} else {
 			echo "<script>alert('刪除失敗');</script>";
 			echo $stmt->error;

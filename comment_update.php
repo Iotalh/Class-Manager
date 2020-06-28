@@ -66,7 +66,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			$stmt->close();
 			$db_link->close();
 			// echo "新增成功";
-			echo "<script>alert('修改成功'); location.href='comment_list.php?classId=".$classId."';</script>";
+			echo "<script>alert('修改成功'); location.href='comment_read.php?classId=".$classId."';</script>";
 		} else {
 			echo "<script>alert('修改失敗');</script>";
 			echo $stmt->error;

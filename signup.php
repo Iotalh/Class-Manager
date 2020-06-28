@@ -154,7 +154,7 @@ if (isset($_POST['submit_info'])) {
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">Password</span>
+								<span class="input-group-text" id="basic-addon1">密碼</span>
 							</div>
 							<input type="password" class="form-control" aria-describedby="basic-addon1" name="passwd" required>
 						</div>

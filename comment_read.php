@@ -125,6 +125,8 @@ if (isset($_GET["classId"])) {
                                         if (isset($userName)) {
                                             if ($userName == $_SESSION["userName"] || $_SESSION["userRole"] == "admin") {
                                                 echo "<span class='badge badge-light'>" . $userName . "</span>";
+                                            }else{
+                                                echo "<span class='badge badge-light'>某個也有修課的同學</span>";
                                             }
                                         }
                                         if ($_SESSION['id'] == NULL) {

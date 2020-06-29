@@ -2,7 +2,7 @@
 session_start();
 header("Connect-Type: text/html; charset = utf-8");
 include("connectMysql.php");
-$sql_query = "SELECT * FROM class ORDER BY id ASC";
+$sql_query = "SELECT * FROM class ORDER BY semester, classId";
 $result = $db_link->query($sql_query);
 $db_link->close();
 
@@ -43,10 +43,10 @@ $db_link->close();
 					<a class="btn btn-dark float-right" href="login.php">登入</a>
 					<a class="btn btn-dark float-right" href="signup.php">註冊</a>
 				<? } else { ?>
-					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
 					<? if ($_SESSION["userRole"] != "student") { ?>
 						<a class="btn btn-dark float-right" href="class_edit.php">編輯</a>
 					<? } ?>
+					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
 					<a class="btn btn-dark float-right" href="logout.php">登出</a>
 				<? } ?>
 			</div>

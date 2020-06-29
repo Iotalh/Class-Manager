@@ -2,7 +2,7 @@
 session_start();
 header("Connect-Type: text/html; charset = utf-8");
 include("connectMysql.php");
-$sql_query = "SELECT * FROM class ORDER BY id ASC";
+$sql_query = "SELECT * FROM class ORDER BY semester, classId";
 $result = $db_link->query($sql_query);
 if ($_SESSION["userRole"] != 'admin') {
 	$_SESSION["id"] = NULL;

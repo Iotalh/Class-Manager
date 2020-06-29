@@ -80,7 +80,7 @@ if (isset($_GET["classId"])) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
 	<link rel="stylesheet" href="css/comment.css">
 	<link rel="stylesheet" href="css/nav.css">
-	<title>編輯評論</title>
+	<title>新增評論</title>
 </head>
 
 <body>
@@ -99,7 +99,7 @@ if (isset($_GET["classId"])) {
 
 				</ul>
 				<div class="row nav-item justify-content-end">
-					<a class="nav-link nav-btn" href="#">登出</a>
+					<a class="nav-link nav-btn" href="logout.php">登出</a>
 				</div>
 			</div>
 		</nav>

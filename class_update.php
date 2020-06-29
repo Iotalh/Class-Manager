@@ -1,5 +1,22 @@
 <?
+session_start();
 include("connectMysql.php");
+
+if($_SESSION["userRole"] == NULL){
+	$message = "請先登入";
+	echo "<script>alert('$message'); 
+	location.href = 'login.php';</script>";
+}
+if ($_SESSION["userRole"] != 'admin') { //測試是不是管理者
+	$_SESSION["id"] = NULL;
+	$_SESSION["userName"] = NULL;
+	$_SESSION["userRole"] = NULL;
+	$_SESSION["studentId"] = NULL;
+	$_SESSION["department"] = NULL;
+	$message = "錯誤!你不是管理者!!!!!即將回到首頁並登出";
+	echo "<script>alert('$message'); 
+	location.href = 'index.php';</script>";
+}
 if (isset($_GET["id"])) {
 	$id = $_GET["id"];
 	$sql_select = "SELECT department, semester, classId, credit, title, teacher, link FROM class WHERE id=?";

@@ -40,6 +40,16 @@ CREATE TABLE `class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- 傾印資料表的資料 `class`
+--
+
+INSERT INTO `class` (`id`, `department`, `semester`, `classId`, `credit`, `title`, `teacher`, `link`) VALUES
+(1, '資傳系', '1082', 'IC261', 3, '網路資料庫概論', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=108&s=2&id=IC261&c=A'),
+(2, '資工系', '1082', 'CS380', 3, 'Ｗｅｂ程式設計', '歐昱言', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=109&s=1&id=CS380&c=A'),
+(4, '資工系', '1082', 'IC338', 3, '網頁遊戲程式設計', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=108&s=2&id=IC338&c=A'),
+(5, '資傳系', '1091', 'IC257', 3, '網際網路程式設計', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=109&s=1&id=IC257&c=A');
+
+--
 -- 已傾印資料表的索引
 --
 
@@ -57,7 +67,7 @@ ALTER TABLE `class`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

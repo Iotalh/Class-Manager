@@ -41,6 +41,15 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- 傾印資料表的資料 `comment`
+--
+
+INSERT INTO `comment` (`id`, `class`, `student`, `createTime`, `updateTime`, `content`, `sweetScore`, `hwScore`, `learnScore`) VALUES
+(25, 2, 6, '2020-06-28 19:47:02', '2020-06-28 19:47:02', 'AAAAAAAAAAAAAAAAAAAAA', '3', '7', '6'),
+(26, 1, 7, '2020-06-28 22:28:51', '2020-06-29 22:43:05', '讚讚讚', '5', '7', '10'),
+(27, 5, 8, '2020-06-28 23:49:15', '2020-06-28 23:49:15', '1234', '7', '3', '10');
+
+--
 -- 已傾印資料表的索引
 --
 
@@ -60,7 +69,7 @@ ALTER TABLE `comment`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- 已傾印資料表的限制式

@@ -29,14 +29,25 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `account` (
-  `Id` int(10) UNSIGNED NOT NULL,
-  `role` enum('admin','student') CHARACTER SET utf8 NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `userRole` enum('admin','student') CHARACTER SET utf8 NOT NULL,
   `studentId` int(10) UNSIGNED NOT NULL,
-  `salt` varchar(100) CHARACTER SET utf8 NOT NULL,
   `hashValue` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `name` varchar(10) CHARACTER SET utf8 NOT NULL,
-  `department` enum('資傳系','資工系','資訊英專') CHARACTER SET utf8 NOT NULL
+  `userName` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `department` enum('資傳系','資工系','資英系') CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `account`
+--
+
+INSERT INTO `account` (`id`, `userRole`, `studentId`, `hashValue`, `userName`, `department`) VALUES
+(1, 'admin', 1072026, '$2y$10$/1iWp2l9JNr8y2lwO3aHre9VyoSN.0k15TMf2ybbPUUcSUKpQfW8O', 'Luna', '資傳系'),
+(5, 'student', 0, '$2y$10$wA6wdHQJ.cfNuelu4jdcrOXtVpga/MZ4kxBiMoYZoqConstV8vFJC', '1', '資傳系'),
+(6, 'admin', 1024, '$2y$10$ex0UQBOE/a4DMWNwaaz6h.oiuHm7xviayWCysIy/Z1HKpywDjbJ7G', '蔥蔥', '資工系'),
+(7, 'admin', 12345, '$2y$10$m3sQ5YmwowkAfTnDrlxRy.8dqZLtJHnAGh/oUETPO581OX4QLUU9S', '呱呱', '資傳系'),
+(8, 'student', 1072020, '$2y$10$CdveU4VrsP9eKP2JpjGJRe04cOaA2RfKV7rQ0KLuhlIiD3k7EGLVW', '路人1', '資工系'),
+(9, 'student', 1072021, '$2y$10$TinK6LJwZr1edaWHrWaVzee2t.KhMJ.DdpQv7G4YaCexYVXijl3d6', '同學1', '資傳系');
 
 -- --------------------------------------------------------
 
@@ -54,6 +65,16 @@ CREATE TABLE `class` (
   `teacher` varchar(10) CHARACTER SET utf8 NOT NULL,
   `link` varchar(200) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `class`
+--
+
+INSERT INTO `class` (`id`, `department`, `semester`, `classId`, `credit`, `title`, `teacher`, `link`) VALUES
+(1, '資傳系', '1082', 'IC261', 3, '網路資料庫概論', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=108&s=2&id=IC261&c=A'),
+(2, '資工系', '1082', 'CS380', 3, 'Ｗｅｂ程式設計', '歐昱言', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=109&s=1&id=CS380&c=A'),
+(4, '資工系', '1082', 'IC338', 3, '網頁遊戲程式設計', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=108&s=2&id=IC338&c=A'),
+(5, '資傳系', '1091', 'IC257', 3, '網際網路程式設計', '張家榮', 'https://portal.yzu.edu.tw/cosSelect/Cos_Plan.aspx?y=109&s=1&id=IC257&c=A');
 
 -- --------------------------------------------------------
 
@@ -74,6 +95,15 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- 傾印資料表的資料 `comment`
+--
+
+INSERT INTO `comment` (`id`, `class`, `student`, `createTime`, `updateTime`, `content`, `sweetScore`, `hwScore`, `learnScore`) VALUES
+(25, 2, 6, '2020-06-28 19:47:02', '2020-06-28 19:47:02', 'AAAAAAAAAAAAAAAAAAAAA', '3', '7', '6'),
+(26, 1, 7, '2020-06-28 22:28:51', '2020-06-29 22:43:05', '讚讚讚', '5', '7', '10'),
+(27, 5, 8, '2020-06-28 23:49:15', '2020-06-28 23:49:15', '1234', '7', '3', '10');
+
+--
 -- 已傾印資料表的索引
 --
 
@@ -81,7 +111,7 @@ CREATE TABLE `comment` (
 -- 資料表索引 `account`
 --
 ALTER TABLE `account`
-  ADD PRIMARY KEY (`Id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- 資料表索引 `class`
@@ -93,7 +123,9 @@ ALTER TABLE `class`
 -- 資料表索引 `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comment_ibfk_class` (`class`),
+  ADD KEY `comment_ibfk_student` (`student`);
 
 --
 -- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
@@ -103,19 +135,30 @@ ALTER TABLE `comment`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `account`
 --
 ALTER TABLE `account`
-  MODIFY `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- 已傾印資料表的限制式
+--
+
+--
+-- 資料表的限制式 `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_ibfk_class` FOREIGN KEY (`class`) REFERENCES `class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comment_ibfk_student` FOREIGN KEY (`student`) REFERENCES `account` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

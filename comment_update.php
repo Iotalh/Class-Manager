@@ -59,18 +59,30 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 		$stmt->close();
 	}
 	if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
-		$sql_update = "UPDATE comment SET updateTime=now(), content=?,sweetScore=?, hwScore=?, learnScore=? WHERE id=?";
-		$stmt = $db_link->prepare($sql_update);
-		$stmt->bind_param("ssssi", $_POST["content"], $_POST["sweetScore"], $_POST["hwScore"], $_POST["learnScore"], $_POST["id"]);
-		if ($stmt->execute()) {
-			$stmt->close();
-			$db_link->close();
-			// echo "新增成功";
-			echo "<script>alert('修改成功'); location.href='comment_read.php?classId=".$classId."';</script>";
+		if (isset($_POST["content"]) && isset($_POST["sweetScore"]) && isset($_POST["hwScore"]) && isset($_POST["learnScore"])) {
+			$content = $_POST["content"];
+			$sweetScore = $_POST["sweetScore"];
+			$hwScore = $_POST["hwScore"];
+			$learnScore = $_POST["learnScore"];
+			if ($content == "" || $sweetScore == "" || $hwScore == "" || $learnScore == "") {
+				echo "<script>alert('尚有欄位沒有填寫'); </script>";
+			} else {
+				$sql_update = "UPDATE comment SET updateTime=now(), content=?,sweetScore=?, hwScore=?, learnScore=? WHERE id=?";
+				$stmt = $db_link->prepare($sql_update);
+				$stmt->bind_param("ssssi", $content, $sweetScore, $hwScore, $learnScore, $_POST["id"]);
+				if ($stmt->execute()) {
+					$stmt->close();
+					$db_link->close();
+					// echo "新增成功";
+					echo "<script>alert('修改成功'); location.href='comment_read.php?classId=" . $classId . "';</script>";
+				} else {
+					echo "<script>alert('修改失敗');</script>";
+					echo $stmt->error;
+					die();
+				}
+			}
 		} else {
-			echo "<script>alert('修改失敗');</script>";
-			echo $stmt->error;
-			die();
+			echo "<script>alert('尚有欄位沒有填寫'); </script>";
 		}
 	}
 }
@@ -125,7 +137,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect01">課程甜度</label>
-					<select class="custom-select" id="sweetScore" name="sweetScore">
+					<select class="custom-select" id="sweetScore" name="sweetScore" require>
 						<?php
 						if (isset($sweetScore)) {
 							echo "<option value='$sweetScore'>$sweetScore</option>";
@@ -142,7 +154,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect02">作業壓力</label>
-					<select class="custom-select" id="hwScore" name="hwScore">
+					<select class="custom-select" id="hwScore" name="hwScore" require>
 						<?php
 						if (isset($hwScore)) {
 							echo "<option value='$hwScore'>$hwScore</option>";
@@ -159,7 +171,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8 inputbox">
 					<label for="inputGroupSelect03">學習狀況</label>
-					<select class="custom-select" id="learnScore" name="learnScore">
+					<select class="custom-select" id="learnScore" name="learnScore" require>
 						<?php
 						if (isset($learnScore)) {
 							echo "<option value='$learnScore'>$learnScore</option>";
@@ -176,9 +188,9 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入評論內容"><?php
-					echo $content;
-					?></textarea>
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入評論內容" require><?php
+																																echo $content;
+																																?></textarea>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">

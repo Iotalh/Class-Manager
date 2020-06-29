@@ -5,7 +5,15 @@ if (isset($_GET["classId"])) {
     $classId = $_GET["classId"];
     $sql_select = "SELECT id, student, createTime, updateTime, content ,sweetScore, hwScore, learnScore FROM comment WHERE class={$classId} ORDER BY createTime ASC";
     $comments = $db_link->query($sql_select);
-
+    $total_comments = $comments->num_rows;
+    $sql_class_select = "SELECT title FROM class WHERE id=?";
+    $class_stmt = $db_link->prepare($sql_class_select);
+    $class_stmt->bind_param("i", $classId);
+    if ($class_stmt->execute()) {
+        $class_stmt->bind_result($classTitle);
+        $class_stmt->fetch();
+        $class_stmt->close();
+    }
     session_start();
 
 
@@ -24,7 +32,7 @@ if (isset($_GET["classId"])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
         <link rel="stylesheet" href="css/comment.css">
         <link rel="stylesheet" href="css/nav.css">
-        <title>留言列表</title>
+        <title>評論列表</title>
     </head>
 
     <body>
@@ -43,100 +51,116 @@ if (isset($_GET["classId"])) {
 
                     </ul>
                     <div class="row nav-item justify-content-end">
-                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增留言</a>
-                        <a class="nav-link nav-btn" href="logout.php">登出</a>
+                        <a class="nav-link nav-btn" href="comment_create.php?classId=<? echo $classId; ?>">新增評論</a>
+                        <?php if ($_SESSION['id'] != NULL) { ?>
+                            <a class="nav-link nav-btn" href="logout.php">登出</a>
+                        <?php } else { ?>
+                            <a class="btn btn-dark float-right" href="login.php">登入</a>
+                            <a class="btn btn-dark float-right" href="signup.php">註冊</a>
+                        <?php } ?>
                     </div>
                 </div>
             </nav>
         </header>
-
+        <div class="container info">
+            <div class="alert alert-dark" role='alert'>關於
+                <? echo $classTitle; ?> 的評論
+            </div>
+        </div>
         <div class="container comment-list text-white bg-dark">
-            <?php while ($row = $comments->fetch_assoc()) {
+            <?php if ($total_comments == 0) {
+                echo "<div class='container info'>";
+                echo "<div class='alert alert-warning' role='alert'>";
+                echo "尚無評論，快來當第一個評論的同學吧！";
+                echo "</div></div>";
+            } else {
+                while ($row = $comments->fetch_assoc()) {
             ?>
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="card boder-light mb-3">
-                            <div class="card-header d-flex">
-                                <div class="mr-auto">
-                                    <span class="badge badge-pill badge-secondary"><? echo $row["id"] ?></span>
-                                    <?
-                                    if (isset($row["sweetScore"])) {
-                                        $sweetScore = $row["sweetScore"];
-                                        if ($sweetScore <= 10 && $sweetScore > 6) {
-                                            echo "<span class='badge badge-pill badge-success sweetScore'>課程甜度：$sweetScore</span>";
-                                        } else if ($sweetScore <= 6 && $sweetScore > 3) {
-                                            echo "<span class='badge badge-pill badge-warning sweetScore'>課程甜度：$sweetScore</span>";
-                                        } else {
-                                            echo "<span class='badge badge-pill badge-danger sweetScore'>課程甜度：$sweetScore</span>";
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="card boder-light mb-3">
+                                <div class="card-header d-flex">
+                                    <div class="mr-auto">
+                                        <?
+                                        if (isset($row["sweetScore"])) {
+                                            $sweetScore = $row["sweetScore"];
+                                            if ($sweetScore <= 10 && $sweetScore > 6) {
+                                                echo "<span class='badge badge-pill badge-success sweetScore'>課程甜度：$sweetScore</span>";
+                                            } else if ($sweetScore <= 6 && $sweetScore > 3) {
+                                                echo "<span class='badge badge-pill badge-warning sweetScore'>課程甜度：$sweetScore</span>";
+                                            } else {
+                                                echo "<span class='badge badge-pill badge-danger sweetScore'>課程甜度：$sweetScore</span>";
+                                            }
                                         }
-                                    }
-                                    if (isset($row["hwScore"])) {
-                                        $hwScore = $row["hwScore"];
-                                        if ($hwScore <= 10 && $hwScore > 6) {
-                                            echo "<span class='badge badge-pill badge-success hwScore'>課業壓力：$hwScore</span>";
-                                        } else if ($hwScore <= 6 && $hwScore > 3) {
-                                            echo "<span class='badge badge-pill badge-warning hwScore'>課業壓力：$hwScore</span>";
-                                        } else {
-                                            echo "<span class='badge badge-pill badge-danger hwScore'>課業壓力：$hwScore</span>";
+                                        if (isset($row["hwScore"])) {
+                                            $hwScore = $row["hwScore"];
+                                            if ($hwScore <= 10 && $hwScore > 6) {
+                                                echo "<span class='badge badge-pill badge-danger hwScore'>課業壓力：$hwScore</span>";
+                                            } else if ($hwScore <= 6 && $hwScore > 3) {
+                                                echo "<span class='badge badge-pill badge-warning hwScore'>課業壓力：$hwScore</span>";
+                                            } else {
+                                                echo "<span class='badge badge-pill badge-success hwScore'>課業壓力：$hwScore</span>";
+                                            }
                                         }
-                                    }
-                                    if (isset($row["learnScore"])) {
-                                        $learnScore = $row["learnScore"];
-                                        if ($learnScore <= 10 && $learnScore > 6) {
-                                            echo "<span class='badge badge-pill badge-success learnScore'>天文指數：$learnScore</span>";
-                                        } else if ($learnScore <= 6 && $learnScore > 3) {
-                                            echo "<span class='badge badge-pill badge-warning learnScore'>天文指數：$learnScore</span>";
-                                        } else {
-                                            echo "<span class='badge badge-pill badge-danger learnScore'>天文指數：$learnScore</span>";
+                                        if (isset($row["learnScore"])) {
+                                            $learnScore = $row["learnScore"];
+                                            if ($learnScore <= 10 && $learnScore > 6) {
+                                                echo "<span class='badge badge-pill badge-success learnScore'>學習狀況：$learnScore</span>";
+                                            } else if ($learnScore <= 6 && $learnScore > 3) {
+                                                echo "<span class='badge badge-pill badge-warning learnScore'>學習狀況：$learnScore</span>";
+                                            } else {
+                                                echo "<span class='badge badge-pill badge-danger learnScore'>學習狀況：$learnScore</span>";
+                                            }
                                         }
-                                    }
-                                    $sql_user = "SELECT userName FROM account WHERE id=?";
+                                        $sql_user = "SELECT userName FROM account WHERE id=?";
 
-                                    $user = $db_link->prepare($sql_user);
-                                    $user->bind_param("i", $row["student"]);
-                                    if ($user->execute()) {
-                                        $user->bind_result($userName);
-                                        $user->fetch();
-                                        $user->close();
-                                    }
+                                        $user = $db_link->prepare($sql_user);
+                                        $user->bind_param("i", $row["student"]);
+                                        if ($user->execute()) {
+                                            $user->bind_result($userName);
+                                            $user->fetch();
+                                            $user->close();
+                                        }
 
-                                    if (isset($userName)) {
-                                        if ($userName == $_SESSION["userName"] || $_SESSION["userRole"] == "admin") {
-                                            echo "<span class='badge badge-light'>" . $userName . "</span>";
+                                        if (isset($userName)) {
+                                            if ($userName == $_SESSION["userName"] || $_SESSION["userRole"] == "admin") {
+                                                echo "<span class='badge badge-light'>" . $userName . "</span>";
+                                            }
                                         }
-                                    } else {
-                                        echo "<span class='badge badge-light'>某個也有修課的同學</span>";
-                                    }
-                                    ?>
-                                </div>
-                                <div>
-                                    <?
-                                    if (isset($_SESSION["id"]) && isset($row["student"])) {
-                                        if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
-                                            echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_delete.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
+                                        if ($_SESSION['id'] == NULL) {
+                                            echo "<span class='badge badge-light'>某個也有修課的同學</span>";
                                         }
-                                    }
-                                    ?>
+                                        ?>
+                                    </div>
+                                    <div>
+                                        <?
+                                        if (isset($_SESSION["id"]) && isset($row["student"])) {
+                                            if ($row["student"] == $_SESSION["id"] || $_SESSION["userRole"] == "admin") {
+                                                echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_update.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>修改</a>";
+                                                echo "<a class='btn btn-light btn-sm mr-auto justify-content-end' href='comment_delete.php?classId=" . $classId . "&commentId=" . $row["id"] . "'>刪除</a>";
+                                            }
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body text-secondary">
-                                <p class="card-text">
-                                    <? echo nl2br($row["content"]) ?>
-                                </p>
-                            </div>
-                            <div class="card-footer text-muted">
-                                <div class="d-flex flex-row-reverse">
-                                    <span class="justify-content-end badge badge-pill badge-light">
-                                        <? echo $row["createTime"] ?></span>
-                                    <span class="justify-content-end badge badge-pill badge-light">
-                                        <? echo $row["updateTime"] ?></span>
+                                <div class="card-body text-secondary">
+                                    <p class="card-text">
+                                        <? echo nl2br($row["content"]) ?>
+                                    </p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <div class="d-flex flex-row-reverse">
+                                        <span class="justify-content-end badge badge-pill badge-light">
+                                            建立時間：<? echo $row["createTime"] ?></span>
+                                        <span class="justify-content-end badge badge-pill badge-light">
+                                            更新時間：<? echo $row["updateTime"] ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             <?
+                }
             }
             ?>
         </div>

@@ -34,9 +34,6 @@ $db_link->close();
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="index.php">課程清單 <span class="sr-only">(current)</span></a>
-					</li>
 				</ul>
 				<?
 				if ($_SESSION["userName"] == NULL) { ?>
@@ -44,7 +41,7 @@ $db_link->close();
 					<a class="btn btn-dark float-right" href="signup.php">註冊</a>
 				<? } else { ?>
 					<? if ($_SESSION["userRole"] != "student") { ?>
-						<a class="btn btn-dark float-right" href="class_edit.php">編輯</a>
+						<a class="btn btn-dark float-right" href="classlist_update.php">編輯</a>
 					<? } ?>
 					<a class="btn btn-dark float-right" href="#" hiddden><? echo $_SESSION["userName"] ?></a>
 					<a class="btn btn-dark float-right" href="logout.php">登出</a>
@@ -53,6 +50,7 @@ $db_link->close();
 		</nav>
 	</header>
 	<div class="container info">
+		<h1 class="font-weight-bolder text-center text-white">課程清單</h1>
 		<div class="alert alert-dark" role="alert">
 			<ul class="class-info">
 				<li>點選課名查看評論</li>

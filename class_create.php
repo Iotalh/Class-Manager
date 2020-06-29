@@ -17,24 +17,22 @@ if ($_SESSION["userRole"] != 'admin') { //測試是不是管理者
 
 if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 	include("connectMysql.php");
-	
+
 	$post_title = $_POST["title"];
 
 	$sql_query = "SELECT * FROM class ORDER BY title ";
 	$result = $db_link->query($sql_query);
 
 	$test1 = 1;
-	while($row_result = $result->fetch_assoc())
-	{
-		if($row_result['title'] == $post_title)
-		{
+	while ($row_result = $result->fetch_assoc()) {
+		if ($row_result['title'] == $post_title) {
 			$test1 = 0;
 			//echo "test1=false"."<br>";
 		}
 	}
 
 
-	if($test1 != 0){
+	if ($test1 != 0) {
 		$post_department = $_POST["department"];
 		$post_semester = $_POST["semester"];
 		$post_classId = $_POST["classId"];
@@ -50,15 +48,13 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 		mysqli_query($db_link, $sql_insert);
 		$db_link->close();
 
-		$message="課程新增成功";
+		$message = "課程新增成功";
 		echo "<script>alert('$message');</script>";
-
-	}else{
-		$message="此課程已經新增過摟";
+	} else {
+		$message = "此課程已經新增過摟";
 		echo "<script>alert('$message'); </script>";
-
 	}
-	echo "<script>location.href='class_edit.php';</script>";
+	echo "<script>location.href='classlist_update.php';</script>";
 
 	$db_link->close();
 }
@@ -83,16 +79,13 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
 						<a class="nav-link" href="index.php">課程清單<span class="sr-only">(current)</span></a>
 					</li>
-
 				</ul>
-
-				</ul>
+				<a class="btn btn-dark float-right" href="logout.php">登出</a>
 			</div>
 		</nav>
 	</header>
@@ -176,7 +169,7 @@ if (isset($_POST['submit_info'])) { //測試該課程有沒有被建立過
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">導師名稱</span>
+								<span class="input-group-text" id="basic-addon1">教師名稱</span>
 							</div>
 							<input type="text" class="form-control" aria-label="teacher" aria-describedby="basic-addon1" name="teacher" id="teacher" required>
 						</div>

@@ -80,7 +80,7 @@ if (isset($_GET["classId"])) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
 	<link rel="stylesheet" href="css/comment.css">
 	<link rel="stylesheet" href="css/nav.css">
-	<title>編輯留言</title>
+	<title>編輯評論</title>
 </head>
 
 <body>
@@ -106,11 +106,11 @@ if (isset($_GET["classId"])) {
 	</header>
 
 	<div class="container-fluid post text-white bg-dark">
-		<h1 class="text-center">留言</h1>
+		<h1 class="text-center">評論</h1>
 		<form action="" method="post" name="formPost" onsubmit="return checkForm();">
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<input type="text" name="title" id="title" class="form-control" placeholder="留言課程名稱" value="<? echo $classTitle; ?>" readonly>
+					<input type="text" name="title" id="title" class="form-control" placeholder="評論課程名稱" value="<? echo $classTitle; ?>" readonly>
 				</div>
 			</div>
 			<div class="form-group row justify-content-md-center">
@@ -167,7 +167,7 @@ if (isset($_GET["classId"])) {
 			</div>
 			<div class="form-group row justify-content-md-center">
 				<div class="col-8">
-					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入留言內容"><?php
+					<textarea class="form-control content inputbox" id="content" name="content" placeholder="輸入評論內容"><?php
 						if (isset($content)) {
 							echo $content;
 						}
@@ -177,7 +177,7 @@ if (isset($_GET["classId"])) {
 			<div class="form-group row justify-content-md-center">
 				<input type="hidden" name="id" value="<?php echo $id; ?>">
 				<input type="hidden" name="action" id="action" value="add">
-				<input type="submit" value="送出留言" class="btn btn-dark post-btns" name="button" id="button">
+				<input type="submit" value="送出評論" class="btn btn-dark post-btns" name="button" id="button">
 				<input type="reset" value="重設資料" class="btn btn-dark post-btns" name="button2" id="button2">
 				<input type="button" value="回上一頁" class="btn btn-dark post-btns" name="button3" id="button3" onclick="window.history.back();">
 			</div>

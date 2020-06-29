@@ -18,11 +18,11 @@ if (isset($_GET["id"])) {
 			$stmt->close();
 			$db_link->close();
 			$message = "課程資料更新成功!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
-			//echo "<script>location.href='class_edit.php';</script>";
+			echo "<script>alert('$message'); location.href='classlist_update.php';</script>";
+			//echo "<script>location.href='classlist_update.php';</script>";
 		} else {
 			$message = "課程資料更新失敗!";
-			echo "<script>alert('$message'); location.href='class_edit.php';</script>";
+			echo "<script>alert('$message'); location.href='classlist_update.php';</script>";
 		}
 	}
 }
@@ -161,7 +161,7 @@ if (isset($_GET["id"])) {
 					<div class="col-8">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">導師名稱</span>
+								<span class="input-group-text" id="basic-addon1">教師名稱</span>
 							</div>
 							<input type="text" class="form-control" aria-label="teacher" aria-describedby="basic-addon1" name="teacher" id="teacher" value="<? echo $teacher ?>">
 						</div>

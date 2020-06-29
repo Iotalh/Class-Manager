@@ -79,19 +79,19 @@ if (isset($_POST['login_info'])) {
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
 						<label for="uname"><b>學號</b></label>
-						<input name="studentID" class="form-control" type="text" placeholder="Enter studentID" required>
+						<input name="studentID" class="form-control" type="text" placeholder="請輸入學號" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
-						<label for="psw"><b>Password</b></label>
-						<input name="passwd" class="form-control" type="password" placeholder="Enter Password" required>
+						<label for="psw"><b>密碼</b></label>
+						<input name="passwd" class="form-control" type="password" placeholder="請輸入密碼" required>
 					</div>
 				</div>
 				<div class="form-group row justify-content-md-center">
 					<div class="col-4">
-						<button style="width: 100%;" class="btn btn-dark" type="submit" id="login" name="login_info">Login</button>
-						<input style="width: 100%;" type="button" class="btn btn-dark" value="SignUp" onclick="location.href='signup.php'"></input>
+						<button style="width: 100%;" class="btn btn-dark" type="submit" id="login" name="login_info">登入</button>
+						<a style="width: 100%;" class="btn btn-dark" href="signup.php">註冊</a>
 					</div>
 				</div>
 			</form>

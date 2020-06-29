@@ -4,6 +4,11 @@ header("Connect-Type: text/html; charset = utf-8");
 include("connectMysql.php");
 $sql_query = "SELECT * FROM class ORDER BY id ASC";
 $result = $db_link->query($sql_query);
+if($_SESSION["userRole"] == NULL){
+	$message = "請先登入";
+	echo "<script>alert('$message'); 
+	location.href = 'login.php';</script>";
+}
 if ($_SESSION["userRole"] != 'admin') { //測試是不是管理者
 	$_SESSION["id"] = NULL;
 	$_SESSION["userName"] = NULL;

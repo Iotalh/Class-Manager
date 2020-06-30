@@ -75,7 +75,7 @@ if (isset($_GET["commentId"]) && isset($_GET["classId"])) {
 
 				</ul>
 				<div class="row nav-item justify-content-end">
-					<a class="nav-link nav-btn" href="#">登出</a>
+					<a class="nav-link nav-btn" href="logout.php">登出</a>
 				</div>
 			</div>
 		</nav>
